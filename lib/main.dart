@@ -18,6 +18,10 @@ class _SplashState extends State<Splash> {
           'images/Logo.png',
         ),
         seconds: 3,
+        title: Text(
+          'presents',
+          style: TextStyle(fontFamily: 'Comfortaa'),
+        ),
         navigateAfterSeconds: FirstScreen(),
         backgroundColor: Colors.white,
         photoSize: 100.0,
