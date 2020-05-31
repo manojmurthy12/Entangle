@@ -263,6 +263,10 @@ class _FirstScreenState extends State<FirstScreen> {
     return Scaffold(
       endDrawer: setting(),
       appBar: AppBar(
+        leading: Image.asset(
+          'images/entangle.png',
+          scale: 20,
+        ),
         actions: [
           Builder(
             builder: (context) => IconButton(
