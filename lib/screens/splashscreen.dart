@@ -14,7 +14,7 @@ class _SplashState extends State<Splash> {
         image: Image.asset(
           'images/entangle.png',
         ),
-        seconds: 4,
+        seconds: 2,
         navigateAfterSeconds: FirstScreen(),
         backgroundColor: Colors.white,
         photoSize: 100.0,

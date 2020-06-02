@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'screens/splashscreen.dart';
 import 'screens/home.dart';
 import 'screens/preferences.dart';
+import 'screens/resources.dart';
 
 void main() {
   runApp(MaterialApp(home: Splash()));
@@ -159,7 +160,7 @@ class _FirstScreenState extends State<FirstScreen> {
                 child: Text(
                   'Submit',
                   style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.indigo,
                       fontFamily: 'Staatliches',
                       fontSize: 20),
                 )),
@@ -172,10 +173,10 @@ class _FirstScreenState extends State<FirstScreen> {
   Scaffold preferenceView() {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue[300],
+        backgroundColor: Colors.white,
         title: Text(
           'Select your Preferences',
-          style: TextStyle(color: Colors.white, fontFamily: 'Bebas Neue'),
+          style: TextStyle(color: Colors.indigo, fontFamily: 'Bebas Neue'),
         ),
       ),
       body: preference(),
@@ -183,15 +184,25 @@ class _FirstScreenState extends State<FirstScreen> {
   }
 
   Scaffold PcycleHome() {
-    ListTile buildSubject(String name, String image) {
-      return ListTile(
-        leading: Image.asset(
-          'p-cycle/$image.png',
-          scale: 15,
-        ),
-        title: Text(
-          name,
-          style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
+    FlatButton buildSubject(String name, String image) {
+      return FlatButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ResourceScreen(),
+            ),
+          );
+        },
+        child: ListTile(
+          leading: Image.asset(
+            'p-cycle/$image.png',
+            scale: 15,
+          ),
+          title: Text(
+            name,
+            style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
+          ),
         ),
       );
     }
@@ -208,7 +219,7 @@ class _FirstScreenState extends State<FirstScreen> {
             builder: (context) => IconButton(
               icon: Icon(
                 Icons.settings,
-                color: Colors.black,
+                color: Colors.indigo,
               ),
               onPressed: () => Scaffold.of(context).openEndDrawer(),
               tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
@@ -218,7 +229,7 @@ class _FirstScreenState extends State<FirstScreen> {
         backgroundColor: Colors.white,
         title: Text(
           'My Courses',
-          style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
+          style: TextStyle(color: Colors.indigo, fontFamily: 'Staatliches'),
         ),
       ),
       body: ListView(
@@ -247,15 +258,25 @@ class _FirstScreenState extends State<FirstScreen> {
   }
 
   Scaffold CcycleHome() {
-    ListTile buildSubject(String name, String image) {
-      return ListTile(
-        leading: Image.asset(
-          'c-cycle/$image.png',
-          scale: 15,
-        ),
-        title: Text(
-          name,
-          style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
+    FlatButton buildSubject(String name, String image) {
+      return FlatButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ResourceScreen(),
+            ),
+          );
+        },
+        child: ListTile(
+          leading: Image.asset(
+            'c-cycle/$image.png',
+            scale: 15,
+          ),
+          title: Text(
+            name,
+            style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
+          ),
         ),
       );
     }
