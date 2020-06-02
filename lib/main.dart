@@ -3,6 +3,7 @@ import 'screens/splashscreen.dart';
 import 'screens/home.dart';
 import 'screens/preferences.dart';
 import 'screens/resources.dart';
+import 'tags/courses.dart';
 
 void main() {
   runApp(MaterialApp(home: Splash()));
@@ -14,9 +15,12 @@ String SelectedSem =
 String SelectedBranch = '';
 TextEditingController controller;
 
+int SubjectNumber = 0;
 String semester = 'P-Cycle';
 String branch = 'ECE';
 String name = '';
+
+List<String> Courses = [];
 
 class FirstScreen extends StatefulWidget {
   FirstScreen({Key key}) : super(key: key);
@@ -183,30 +187,31 @@ class _FirstScreenState extends State<FirstScreen> {
     );
   }
 
-  Scaffold PcycleHome() {
-    FlatButton buildSubject(String name, String image) {
-      return FlatButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ResourceScreen(),
-            ),
-          );
-        },
-        child: ListTile(
-          leading: Image.asset(
-            'p-cycle/$image.png',
-            scale: 15,
+  FlatButton buildSubject(int course, String image) {
+    SubjectNumber = course;
+    return FlatButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResourceScreen(),
           ),
-          title: Text(
-            name,
-            style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
-          ),
+        );
+      },
+      child: ListTile(
+        leading: Image.asset(
+          '$SelectedSem/$image.png',
+          scale: 15,
         ),
-      );
-    }
+        title: Text(
+          Courses[SubjectNumber],
+          style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
+        ),
+      ),
+    );
+  }
 
+  Scaffold PcycleHome() {
     return Scaffold(
       endDrawer: setting(),
       appBar: AppBar(
@@ -241,46 +246,22 @@ class _FirstScreenState extends State<FirstScreen> {
               scale: 1,
             ),
           ),
-          buildSubject('Mathematics-1', 'math'),
-          buildSubject('Mathematics-2', 'math'),
-          buildSubject('Physics', 'physics'),
-          buildSubject('Basic Electrical Engg', 'electrical'),
-          buildSubject('Elements of Civil Engineering and Mechanics', 'civil'),
-          buildSubject('Elements of Mechanical Engg', 'mechanical'),
-          buildSubject('Workshop Practice', 'workshop'),
-          buildSubject('Physics Lab', 'physicslab'),
-          buildSubject(
-              'Constitution of India and Professional Ethics', 'constitution'),
-          buildSubject('Kannada', 'kannada')
+          buildSubject(0, 'math'),
+          buildSubject(1, 'math'),
+          buildSubject(2, 'physics'),
+          buildSubject(3, 'electrical'),
+          buildSubject(4, 'civil'),
+          buildSubject(5, 'mechanical'),
+          buildSubject(6, 'workshop'),
+          buildSubject(7, 'physicslab'),
+          buildSubject(8, 'constitution'),
+          buildSubject(9, 'kannada')
         ],
       ),
     );
   }
 
   Scaffold CcycleHome() {
-    FlatButton buildSubject(String name, String image) {
-      return FlatButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ResourceScreen(),
-            ),
-          );
-        },
-        child: ListTile(
-          leading: Image.asset(
-            'c-cycle/$image.png',
-            scale: 15,
-          ),
-          title: Text(
-            name,
-            style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
-          ),
-        ),
-      );
-    }
-
     return Scaffold(
       endDrawer: setting(),
       appBar: AppBar(
@@ -315,15 +296,15 @@ class _FirstScreenState extends State<FirstScreen> {
               scale: 1,
             ),
           ),
-          buildSubject('Mathematics-1', 'math'),
-          buildSubject('Mathematics-2', 'math'),
-          buildSubject('Chemistry', 'chemistry'),
-          buildSubject('Programming in C and Data Structures', 'comp'),
-          buildSubject('Computer aided engineering Drawing', 'caed'),
-          buildSubject('Basic Electronics', 'electronics'),
-          buildSubject('Chemistry Lab', 'chemlab'),
-          buildSubject('Environmental Studies ', 'environment'),
-          buildSubject('English Language', 'english')
+          buildSubject(0, 'math'),
+          buildSubject(1, 'math'),
+          buildSubject(2, 'chemistry'),
+          buildSubject(3, 'comp'),
+          buildSubject(4, 'caed'),
+          buildSubject(5, 'electronics'),
+          buildSubject(6, 'chemlab'),
+          buildSubject(7, 'environment'),
+          buildSubject(8, 'english')
         ],
       ),
     );
@@ -346,10 +327,14 @@ class _FirstScreenState extends State<FirstScreen> {
         SelectedName = value;
       });
     });
-    if (SelectedSem == 'P-Cycle') return bottomNavigate(PcycleHome());
-    if (SelectedSem == 'C-Cycle')
+    if (SelectedSem == 'P-Cycle') {
+      Courses = PcycleCourses;
+      return bottomNavigate(PcycleHome());
+    }
+    if (SelectedSem == 'C-Cycle') {
+      Courses = CcycleCourses;
       return bottomNavigate(CcycleHome());
-    else
+    } else
       return preferenceView();
   }
 }
