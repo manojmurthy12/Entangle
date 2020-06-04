@@ -1,7 +1,8 @@
+import 'package:entangle/tags/modules.dart';
 import 'package:flutter/material.dart';
 import 'screens/splashscreen.dart';
 import 'screens/home.dart';
-import 'screens/preferences.dart';
+import 'preferences.dart';
 import 'screens/resources.dart';
 import 'tags/courses.dart';
 
@@ -16,11 +17,15 @@ String SelectedBranch = '';
 TextEditingController controller;
 
 int SubjectNumber = 0;
+int TopicNumber = 0;
+int SubtopicNumber = 0;
 String semester = 'P-Cycle';
 String branch = 'ECE';
 String name = '';
 
 List<String> Courses = [];
+
+List<List<List<String>>> SelectedCourse = [];
 
 class FirstScreen extends StatefulWidget {
   FirstScreen({Key key}) : super(key: key);
@@ -49,7 +54,7 @@ class _FirstScreenState extends State<FirstScreen> {
       child: ListView(
         children: [
           Image.asset(
-            'images/course.jpg',
+            'images/settings.jpg',
           ),
           SizedBox(
             height: 20,
@@ -76,7 +81,7 @@ class _FirstScreenState extends State<FirstScreen> {
           ListTile(
             leading: Image.asset(
               'images/semester.png',
-              scale: 12,
+              scale: 15,
             ),
             title: Text(
               'Semester',
@@ -119,7 +124,7 @@ class _FirstScreenState extends State<FirstScreen> {
           ListTile(
             leading: Image.asset(
               'images/branch.png',
-              scale: 12,
+              scale: 15,
             ),
             title: Text(
               'Branch',
@@ -188,9 +193,11 @@ class _FirstScreenState extends State<FirstScreen> {
   }
 
   FlatButton buildSubject(int course, String image) {
-    SubjectNumber = course;
     return FlatButton(
       onPressed: () {
+        setState(() {
+          SubjectNumber = course;
+        });
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -204,7 +211,7 @@ class _FirstScreenState extends State<FirstScreen> {
           scale: 15,
         ),
         title: Text(
-          Courses[SubjectNumber],
+          Courses[course],
           style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
         ),
       ),
@@ -328,10 +335,12 @@ class _FirstScreenState extends State<FirstScreen> {
       });
     });
     if (SelectedSem == 'P-Cycle') {
+      SelectedCourse = Pcycletopics;
       Courses = PcycleCourses;
       return bottomNavigate(PcycleHome());
     }
     if (SelectedSem == 'C-Cycle') {
+      SelectedCourse = Ccycletopics;
       Courses = CcycleCourses;
       return bottomNavigate(CcycleHome());
     } else
