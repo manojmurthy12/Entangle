@@ -1,5 +1,3 @@
-
-
 List<List<List<String>>> Pcycletopics = [
   //Mathematics-1
   [
@@ -59,7 +57,7 @@ List<List<List<String>>> Pcycletopics = [
     [
       'Module-4',
       'Three Phase circuits',
-      'Three PhaseSynchronous Generators',
+      'Three Phase Synchronous Generators',
     ],
     ['Module-5', 'Single Phase Transformers', 'Three Phase Induction Motors']
   ],

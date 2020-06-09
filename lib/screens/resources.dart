@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:entangle/main.dart';
+import 'videotags.dart';
 
 class ResourceScreen extends StatefulWidget {
   @override
@@ -7,34 +8,50 @@ class ResourceScreen extends StatefulWidget {
 }
 
 class _ResourceScreenState extends State<ResourceScreen> {
+  int Topic = 0;
   @override
   Widget build(BuildContext context) {
-    Card buildModule() {
-      return Card(
-        child: Column(
-          children: [
-            ListTile(
-              leading: Image.asset(
-                'images/chapter.png',
-                scale: 16,
-              ),
-              title: Text(
-                SelectedCourse[SubjectNumber][TopicNumber][0],
-                style:
-                    TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
-              ),
-            ),
-            for (SubtopicNumber = 1;
-                SubtopicNumber <
-                    SelectedCourse[SubjectNumber][TopicNumber].length;
-                SubtopicNumber++)
+    FlatButton buildModule(int Topic) {
+      return FlatButton(
+        onPressed: () {
+          setState(() {
+            TopicNumber = Topic;
+          });
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Videotags()));
+        },
+        child: Card(
+          child: Column(
+            children: [
               ListTile(
+                leading: Image.asset(
+                  'courseImages/$CourseImage.png',
+                  scale: 16,
+                ),
                 title: Text(
-                  SelectedCourse[SubjectNumber][TopicNumber][SubtopicNumber],
-                  style: TextStyle(color: Colors.black, fontSize: 12),
+                  SelectedCourse[SubjectNumber][Topic][0],
+                  style:
+                      TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
                 ),
               ),
-          ],
+              for (SubtopicNumber = 1;
+                  SubtopicNumber < SelectedCourse[SubjectNumber][Topic].length;
+                  SubtopicNumber++)
+                ListTile(
+                  leading: Icon(
+                    Icons.check,
+                    color: Colors.green,
+                  ),
+                  title: Text(
+                    SelectedCourse[SubjectNumber][Topic][SubtopicNumber],
+                    style: TextStyle(
+                        color: Colors.blueGrey,
+                        fontSize: 12,
+                        fontFamily: 'Oswald'),
+                  ),
+                ),
+            ],
+          ),
         ),
       );
     }
@@ -74,21 +91,22 @@ class _ResourceScreenState extends State<ResourceScreen> {
           body: TabBarView(children: <Widget>[
             ListView(
               children: [
-                for (TopicNumber = 0;
-                    TopicNumber < SelectedCourse[SubjectNumber].length;
-                    TopicNumber++)
-                  buildModule(),
+                if (SelectedCourse == null)
+                  nothingtoshow2()
+                else
+                  for (Topic = 0;
+                      Topic < SelectedCourse[SubjectNumber].length;
+                      Topic++)
+                    buildModule(Topic),
               ],
             ),
             ListView(
               children: [
-                Center(
-                  child: Text(
-                    'Nothing to show yet.',
-                    style:
-                        TextStyle(color: Colors.black, fontFamily: 'Comfortaa'),
-                  ),
-                )
+                FlatButton(
+                    onPressed: () {
+                      nothingtoshow();
+                    },
+                    child: Text('download'))
               ],
             ),
           ]),

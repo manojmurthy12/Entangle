@@ -5,6 +5,7 @@ import 'screens/home.dart';
 import 'preferences.dart';
 import 'screens/resources.dart';
 import 'tags/courses.dart';
+import 'tags/ImageTags.dart';
 
 void main() {
   runApp(MaterialApp(home: Splash()));
@@ -14,18 +15,52 @@ String SelectedName = '';
 String SelectedSem =
     ''; // this variable will be used to store the present status of the branch and Semester
 String SelectedBranch = '';
+List<String> imageTag = [];
+String CourseImage = '';
 TextEditingController controller;
 
 int SubjectNumber = 0;
 int TopicNumber = 0;
 int SubtopicNumber = 0;
+String name = '';
 String semester = 'P-Cycle';
 String branch = 'ECE';
-String name = '';
 
 List<String> Courses = [];
 
 List<List<List<String>>> SelectedCourse = [];
+
+Container nothingtoshow() {
+  return Container(
+    child: Center(
+      child: Column(
+        children: [
+          Image.asset('images/empty.jpg'),
+          Text(
+            'Nothing to show yet',
+            style: TextStyle(color: Colors.blueGrey),
+          )
+        ],
+      ),
+    ),
+  );
+}
+
+Container nothingtoshow2() {
+  return Container(
+    child: Center(
+      child: Column(
+        children: [
+          Image.asset('images/empty2.jpg'),
+          Text(
+            'Nothing to show yet',
+            style: TextStyle(color: Colors.blueGrey),
+          )
+        ],
+      ),
+    ),
+  );
+}
 
 class FirstScreen extends StatefulWidget {
   FirstScreen({Key key}) : super(key: key);
@@ -37,6 +72,24 @@ class _FirstScreenState extends State<FirstScreen> {
   @override
   void initState() {
     super.initState();
+    getSem().then((value) {
+      setState(() {
+        semester = value;
+        SelectedSem = value;
+      });
+    });
+    getBranch().then((value) {
+      setState(() {
+        branch = value;
+        SelectedBranch = value;
+      });
+    });
+    getName().then((value) {
+      setState(() {
+        name = value;
+        SelectedName = value;
+      });
+    });
   }
 
   void dispose() {
@@ -54,7 +107,7 @@ class _FirstScreenState extends State<FirstScreen> {
       child: ListView(
         children: [
           Image.asset(
-            'images/settings.jpg',
+            'images/course.jpg',
           ),
           SizedBox(
             height: 20,
@@ -136,14 +189,23 @@ class _FirstScreenState extends State<FirstScreen> {
               icon: Icon(Icons.arrow_drop_down),
               iconSize: 24,
               elevation: 16,
-              items: <String>['ECE', 'CSE', 'EEE']
-                  .map<DropdownMenuItem<String>>((String value) {
+              items: <String>[
+                'ECE',
+                'CSE',
+                'EEE',
+                'Civil',
+                'Mechanical',
+                'ISE',
+                'Other',
+              ].map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(
                     value.toString(),
                     style: TextStyle(
-                        color: Colors.grey, fontFamily: 'Staatliches'),
+                      color: Colors.grey,
+                      fontFamily: 'Staatliches',
+                    ),
                   ),
                 );
               }).toList(),
@@ -157,22 +219,24 @@ class _FirstScreenState extends State<FirstScreen> {
           SizedBox(
             height: 20,
           ),
-          Card(
-            child: FlatButton(
-                onPressed: () {
-                  setState(() {
-                    setSem(semester);
-                    setBranch(branch);
-                    setName(name);
-                  });
-                },
-                child: Text(
-                  'Submit',
-                  style: TextStyle(
-                      color: Colors.indigo,
-                      fontFamily: 'Staatliches',
-                      fontSize: 20),
-                )),
+          FlatButton(
+            onPressed: () {
+              setState(() {
+                setBranch(branch);
+                setSem(semester);
+                if (name != '' || name != null) setName(name);
+              });
+            },
+            child: Card(
+              color: Colors.indigo,
+              child: Text(
+                '  Submit  ',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Staatliches',
+                    fontSize: 20),
+              ),
+            ),
           )
         ],
       ),
@@ -196,6 +260,7 @@ class _FirstScreenState extends State<FirstScreen> {
     return FlatButton(
       onPressed: () {
         setState(() {
+          CourseImage = image;
           SubjectNumber = course;
         });
         Navigator.push(
@@ -207,7 +272,7 @@ class _FirstScreenState extends State<FirstScreen> {
       },
       child: ListTile(
         leading: Image.asset(
-          '$SelectedSem/$image.png',
+          'courseImages/$image.png',
           scale: 15,
         ),
         title: Text(
@@ -218,7 +283,8 @@ class _FirstScreenState extends State<FirstScreen> {
     );
   }
 
-  Scaffold PcycleHome() {
+  Scaffold Home(List image) {
+    imageTag = image;
     return Scaffold(
       endDrawer: setting(),
       appBar: AppBar(
@@ -241,56 +307,6 @@ class _FirstScreenState extends State<FirstScreen> {
         backgroundColor: Colors.white,
         title: Text(
           'My Courses',
-          style: TextStyle(color: Colors.indigo, fontFamily: 'Staatliches'),
-        ),
-      ),
-      body: ListView(
-        children: [
-          Card(
-            color: Colors.lightBlueAccent,
-            child: Image.asset(
-              'images/courses.jpg',
-              scale: 1,
-            ),
-          ),
-          buildSubject(0, 'math'),
-          buildSubject(1, 'math'),
-          buildSubject(2, 'physics'),
-          buildSubject(3, 'electrical'),
-          buildSubject(4, 'civil'),
-          buildSubject(5, 'mechanical'),
-          buildSubject(6, 'workshop'),
-          buildSubject(7, 'physicslab'),
-          buildSubject(8, 'constitution'),
-          buildSubject(9, 'kannada')
-        ],
-      ),
-    );
-  }
-
-  Scaffold CcycleHome() {
-    return Scaffold(
-      endDrawer: setting(),
-      appBar: AppBar(
-        leading: Image.asset(
-          'images/entangle.png',
-          scale: 20,
-        ),
-        actions: [
-          Builder(
-            builder: (context) => IconButton(
-              icon: Icon(
-                Icons.settings,
-                color: Colors.black,
-              ),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-            ),
-          )
-        ],
-        backgroundColor: Colors.white,
-        title: Text(
-          'My Courses',
           style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
         ),
       ),
@@ -303,15 +319,8 @@ class _FirstScreenState extends State<FirstScreen> {
               scale: 1,
             ),
           ),
-          buildSubject(0, 'math'),
-          buildSubject(1, 'math'),
-          buildSubject(2, 'chemistry'),
-          buildSubject(3, 'comp'),
-          buildSubject(4, 'caed'),
-          buildSubject(5, 'electronics'),
-          buildSubject(6, 'chemlab'),
-          buildSubject(7, 'environment'),
-          buildSubject(8, 'english')
+          for (int index = 0; index < image.length; index++)
+            buildSubject(index, imageTag[index]),
         ],
       ),
     );
@@ -337,12 +346,47 @@ class _FirstScreenState extends State<FirstScreen> {
     if (SelectedSem == 'P-Cycle') {
       SelectedCourse = Pcycletopics;
       Courses = PcycleCourses;
-      return bottomNavigate(PcycleHome());
+      return bottomNavigate(Home(Pcycle));
     }
     if (SelectedSem == 'C-Cycle') {
       SelectedCourse = Ccycletopics;
       Courses = CcycleCourses;
-      return bottomNavigate(CcycleHome());
+      return bottomNavigate(Home(Ccycle));
+    }
+    if (SelectedBranch == 'ECE' && SelectedSem == 'Third') {
+      SelectedCourse = null;
+      Courses = Ece3Courses;
+      return bottomNavigate(Home(Ece3));
+    }
+    if (SelectedBranch == 'ECE' && SelectedSem == 'Fourth') {
+      SelectedCourse = null;
+      Courses = Ece4Courses;
+      return bottomNavigate(Home(Ece4));
+    }
+    if (SelectedBranch == 'ECE' && SelectedSem == 'Fifth') {
+      SelectedCourse = null;
+      Courses = Ece5Courses;
+      return bottomNavigate(Home(Ece5));
+    }
+    if (SelectedBranch == 'ECE' && SelectedSem == 'Sixth') {
+      SelectedCourse = null;
+      Courses = Ece6Courses;
+      return bottomNavigate(Home(Ece6));
+    }
+    if (SelectedBranch == 'ECE' && SelectedSem == 'Seventh') {
+      SelectedCourse = null;
+      Courses = Ece7Courses;
+      return bottomNavigate(Home(Ece7));
+    }
+    if (SelectedBranch == 'ECE' && SelectedSem == 'Eighth') {
+      SelectedCourse = null;
+      Courses = Ece8Courses;
+      return bottomNavigate(Home(Ece8));
+    }
+    if (SelectedBranch == 'Civil' && SelectedSem == 'Third') {
+      SelectedCourse = null;
+      Courses = Civil3Courses;
+      return bottomNavigate(Home(Civil3));
     } else
       return preferenceView();
   }

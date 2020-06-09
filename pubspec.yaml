@@ -25,8 +25,7 @@ flutter:
 
   assets:
     - images/
-    - P-Cycle/
-    - C-Cycle/
+    - courseImages/
   fonts:
     - family: Pacifico
       fonts:

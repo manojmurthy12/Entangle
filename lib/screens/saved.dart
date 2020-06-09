@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:entangle/main.dart';
 
 Scaffold save() {
   return Scaffold(
     body: ListView(
-      children: [Image.asset('images/saved.jpg'), Center(child: Text('Saved'))],
+      children: [nothingtoshow2()],
     ),
   );
 }

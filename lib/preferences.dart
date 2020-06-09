@@ -1,10 +1,11 @@
+import 'package:entangle/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<String> getName() async {
   final prefs = await SharedPreferences.getInstance();
   final _nameSelect = prefs.getString('Name');
-  if (_nameSelect == null)
-    return 'Name';
+  if (_nameSelect == null || _nameSelect == '')
+    return SelectedName;
   else
     return _nameSelect;
 }
