@@ -1,6 +1,7 @@
 import 'package:entangle/main.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:flutter/material.dart';
+import 'package:entangle/signin.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -12,8 +13,10 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     return SplashScreen(
         image: Image.asset(
-          'images/entangle.png',
+          'images/Logo.png',
+          scale: 4,
         ),
+        title: Text('presents'),
         seconds: 2,
         navigateAfterSeconds: FirstScreen(),
         backgroundColor: Colors.white,

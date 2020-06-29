@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "374462319231",
+    "firebase_url": "https://entangle-8933b.firebaseio.com",
+    "project_id": "entangle-8933b",
+    "storage_bucket": "entangle-8933b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374462319231:android:d7d5e13f21c24d98d9cd4a",
+        "android_client_info": {
+          "package_name": "com.quantumloop.entangle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "374462319231-pusr1s3p9gkhf88arp43j6907ord9qja.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quantumloop.entangle",
+            "certificate_hash": "6b6fc0d6074450d0cfe65085fd443a673b694d0f"
+          }
+        },
+        {
+          "client_id": "374462319231-pvg5tfm78c1t4o82om55slk6lbvcrsqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeZlgKgaYs0mubAzVigcNAM7ALBRfqTDs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "374462319231-pvg5tfm78c1t4o82om55slk6lbvcrsqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

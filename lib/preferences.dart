@@ -19,7 +19,7 @@ Future<String> getSem() async {
   final prefs = await SharedPreferences.getInstance();
   final _semSelect = prefs.getString('Sem');
   if (_semSelect == null)
-    return '';
+    return 'P-Cycle';
   else
     return _semSelect;
 } //it will access device storage and returns the current semester
@@ -33,7 +33,7 @@ Future<String> getBranch() async {
   final prefs = await SharedPreferences.getInstance();
   final _branchSelect = prefs.getString('Branch');
   if (_branchSelect == null)
-    return '';
+    return 'ECE';
   else
     return _branchSelect;
 } //it will access device storage and returns the current branch
