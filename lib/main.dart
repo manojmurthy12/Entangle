@@ -1,5 +1,9 @@
+import 'package:entangle/screens/Sign_in.dart';
+import 'package:entangle/tags/VideoLinks.dart';
+import 'package:entangle/tags/VideoNames.dart';
 import 'package:entangle/tags/modules.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'screens/splashscreen.dart';
 import 'screens/home.dart';
 import 'preferences.dart';
@@ -12,27 +16,29 @@ import 'dart:convert' show json;
 import "package:http/http.dart" as http;
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:share/share.dart';
+
+GoogleSignIn googleSignIn;
 void main() {
   runApp(MaterialApp(home: Splash()));
 }
 
-GoogleSignIn _googleSignIn = GoogleSignIn(
-  scopes: <String>[
-    'email',
-    'https://www.googleapis.com/auth/contacts.readonly',
-  ],
-);
 String SelectedName = '';
 String SelectedSem =
     ''; // this variable will be used to store the present status of the branch and Semester
 String SelectedBranch = '';
 List<String> imageTag = [];
 String CourseImage = '';
+String VideoUrl;
+String VideoTitle;
+List<String> UpnextVideos;
+
 TextEditingController controller;
 
 int SubjectNumber = 0;
 int TopicNumber = 0;
 int SubtopicNumber = 0;
+int VideoNumber = 0;
 String name = '';
 String semester = 'P-Cycle';
 String branch = 'ECE';
@@ -40,14 +46,18 @@ String phoneNumber;
 GoogleUserCircleAvatar userImage;
 GoogleSignInAccount currentUser;
 String contactText;
-
-FirebaseUser user;
-final phoneController = TextEditingController();
-final codeController = TextEditingController();
+bool fromSave = false;
 
 List<String> Courses = [];
 
 List<List<List<String>>> SelectedCourse = [];
+
+List<List<List<List<String>>>> SelectedCourseVideo = [];
+
+List<List<List<List<String>>>> SelectedCourseVideolinks = [];
+
+List<String> SavedVideo = [];
+List<String> SavedLink = [];
 
 Container nothingtoshow() {
   return Container(
@@ -89,54 +99,12 @@ class FirstScreen extends StatefulWidget {
 
 class _FirstScreenState extends State<FirstScreen> {
   @override
-  void initState() {
-    super.initState();
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
-      setState(() {
-        currentUser = account;
-      });
-    });
-    _googleSignIn.signInSilently();
-
-    if (currentUser != null)
-      userImage = GoogleUserCircleAvatar(
-        identity: currentUser,
-      );
-
-    getSem().then((value) {
-      setState(() {
-        semester = value;
-        SelectedSem = value;
-      });
-    });
-    getBranch().then((value) {
-      setState(() {
-        branch = value;
-        SelectedBranch = value;
-      });
-    });
-    getName().then((value) {
-      setState(() {
-        name = value;
-        SelectedName = value;
-      });
-    });
-  }
+  void initState() {}
 
   void dispose() {
     controller.dispose();
     super.dispose();
   }
-
-  Future<void> _handleSignIn() async {
-    try {
-      await _googleSignIn.signIn();
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
   Drawer setting() {
     return Drawer(child: preference());
@@ -153,16 +121,23 @@ class _FirstScreenState extends State<FirstScreen> {
           SizedBox(
             height: 20,
           ),
-          ListTile(
-            leading: GoogleUserCircleAvatar(
-              identity: currentUser,
-            ),
-            title: Text(currentUser.displayName ?? ''),
-            subtitle: Text(currentUser.email ?? ''),
-          ),
-          RaisedButton(
-            child: const Text('SIGN OUT'),
-            onPressed: _handleSignOut,
+          Column(
+            children: [
+              ListTile(
+                leading: GoogleUserCircleAvatar(
+                  identity: currentUser,
+                ),
+                title: Text(currentUser.displayName ?? ''),
+                subtitle: Text(currentUser.email ?? ''),
+              ),
+              Container(
+                child: RaisedButton(
+                  child: const Text('SIGN OUT'),
+                  onPressed: handleSignOut,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 80),
+              ),
+            ],
           ),
           SizedBox(
             height: 20,
@@ -255,16 +230,17 @@ class _FirstScreenState extends State<FirstScreen> {
           SizedBox(
             height: 20,
           ),
-          FlatButton(
-            onPressed: () {
-              setState(() {
-                setBranch(branch);
-                setSem(semester);
-                if (name != '' || name != null) setName(name);
-              });
-            },
-            child: Card(
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 40),
+            child: RaisedButton(
               color: Colors.indigo,
+              onPressed: () {
+                setState(() {
+                  setBranch(branch);
+                  setSem(semester);
+                  if (name != '' || name != null) setName(name);
+                });
+              },
               child: Text(
                 '  Submit  ',
                 style: TextStyle(
@@ -273,6 +249,20 @@ class _FirstScreenState extends State<FirstScreen> {
                     fontSize: 20),
               ),
             ),
+          ),
+          SizedBox(
+            height: 60,
+          ),
+          FlatButton.icon(
+            onPressed: () {
+              Share.share(
+                  'https://play.google.com/store/apps/details?id=com.quantumloop.weplay'); //TODO: Change the app id
+            },
+            icon: Icon(
+              Icons.share,
+              color: Colors.indigo,
+            ),
+            label: Text('Share this app with your friends'),
           )
         ],
       ),
@@ -283,62 +273,20 @@ class _FirstScreenState extends State<FirstScreen> {
     if (currentUser != null)
       return Scaffold(
         appBar: AppBar(
+          leading: Image.asset(
+            'images/entangle.png',
+            scale: 20,
+          ),
           backgroundColor: Colors.white,
           title: Text(
             'Select your Preferences',
-            style: TextStyle(color: Colors.indigo, fontFamily: 'Bebas Neue'),
+            style: TextStyle(color: Colors.black, fontFamily: 'Bebas Neue'),
           ),
         ),
         body: preference(),
       );
     else
-      return Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(32),
-            child: Form(
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Column(
-                    children: [
-                      Image.asset(
-                        'images/entangle.png',
-                        scale: 4,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        'Entangle',
-                        style: TextStyle(fontFamily: 'Comfortaa', fontSize: 25),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  RaisedButton(
-                    color: Colors.white,
-                    onPressed: _handleSignIn,
-                    child: ListTile(
-                      leading: Image.asset(
-                        'images/google.png',
-                        scale: 15,
-                      ),
-                      title: const Text('SIGN IN with Google',
-                          style: TextStyle(
-                              fontFamily: 'Staatliches', color: Colors.black)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
+      return signin();
   }
 
   FlatButton buildSubject(int course, String image) {
@@ -368,51 +316,64 @@ class _FirstScreenState extends State<FirstScreen> {
     );
   }
 
-  Scaffold Home(List image) {
+  WillPopScope Home(List image) {
     imageTag = image;
-    return Scaffold(
-      endDrawer: setting(),
-      appBar: AppBar(
-        leading: Image.asset(
-          'images/entangle.png',
-          scale: 20,
-        ),
-        actions: [
-          Builder(
-            builder: (context) => IconButton(
-              icon: Icon(
-                Icons.settings,
-                color: Colors.indigo,
-              ),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-            ),
-          )
-        ],
-        backgroundColor: Colors.white,
-        title: Text(
-          'My Courses',
-          style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
-        ),
-      ),
-      body: ListView(
-        children: [
-          Card(
-            color: Colors.lightBlueAccent,
-            child: Image.asset(
-              'images/courses.jpg',
-              scale: 1,
-            ),
+    return WillPopScope(
+      onWillPop: () => SystemNavigator.pop(),
+      child: Scaffold(
+        endDrawer: setting(),
+        appBar: AppBar(
+          leading: Image.asset(
+            'images/entangle.png',
+            scale: 20,
           ),
-          for (int index = 0; index < image.length; index++)
-            buildSubject(index, imageTag[index]),
-        ],
+          actions: [
+            Builder(
+              builder: (context) => IconButton(
+                icon: Icon(
+                  Icons.settings,
+                  color: Colors.indigo,
+                ),
+                onPressed: () => Scaffold.of(context).openEndDrawer(),
+                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+              ),
+            ),
+            SizedBox(
+              width: 20,
+            )
+          ],
+          backgroundColor: Colors.white,
+          title: Text(
+            'Entangle',
+            style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
+          ),
+        ),
+        body: ListView(
+          children: [
+            Card(
+              color: Colors.lightBlueAccent,
+              child: Image.asset(
+                'images/courses.jpg',
+                scale: 1,
+              ),
+            ),
+            for (int index = 0; index < image.length; index++)
+              buildSubject(index, imageTag[index]),
+          ],
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+      setState(() {
+        currentUser = account;
+      });
+    });
+    googleSignIn.signInSilently();
+
     getSem().then((value) {
       setState(() {
         SelectedSem = value;
@@ -428,51 +389,65 @@ class _FirstScreenState extends State<FirstScreen> {
         SelectedName = value;
       });
     });
+
+    getSavedVideo().then((value) {
+      setState(() {
+        SavedVideo = value;
+      });
+    });
+    getSavedLink().then((value) {
+      setState(() {
+        SavedLink = value;
+      });
+    });
+
     if (currentUser != null) {
       if (SelectedSem == 'P-Cycle') {
         SelectedCourse = Pcycletopics;
         Courses = PcycleCourses;
-        return bottomNavigate(Home(Pcycle));
+        SelectedCourseVideo = PcycleVideos;
+        SelectedCourseVideolinks = PcycleVideoLinks;
+        return bottomNavigate(Home(Pcycle), context);
       }
       if (SelectedSem == 'C-Cycle') {
         SelectedCourse = Ccycletopics;
         Courses = CcycleCourses;
-        return bottomNavigate(Home(Ccycle));
+        return bottomNavigate(Home(Ccycle), context);
       }
       if (SelectedBranch == 'ECE' && SelectedSem == 'Third') {
         SelectedCourse = null;
         Courses = Ece3Courses;
-        return bottomNavigate(Home(Ece3));
+        return bottomNavigate(Home(Ece3), context);
       }
       if (SelectedBranch == 'ECE' && SelectedSem == 'Fourth') {
         SelectedCourse = null;
         Courses = Ece4Courses;
-        return bottomNavigate(Home(Ece4));
+        return bottomNavigate(Home(Ece4), context);
       }
       if (SelectedBranch == 'ECE' && SelectedSem == 'Fifth') {
         SelectedCourse = null;
         Courses = Ece5Courses;
-        return bottomNavigate(Home(Ece5));
+        return bottomNavigate(Home(Ece5), context);
       }
       if (SelectedBranch == 'ECE' && SelectedSem == 'Sixth') {
         SelectedCourse = null;
         Courses = Ece6Courses;
-        return bottomNavigate(Home(Ece6));
+        return bottomNavigate(Home(Ece6), context);
       }
       if (SelectedBranch == 'ECE' && SelectedSem == 'Seventh') {
         SelectedCourse = null;
         Courses = Ece7Courses;
-        return bottomNavigate(Home(Ece7));
+        return bottomNavigate(Home(Ece7), context);
       }
       if (SelectedBranch == 'ECE' && SelectedSem == 'Eighth') {
         SelectedCourse = null;
         Courses = Ece8Courses;
-        return bottomNavigate(Home(Ece8));
+        return bottomNavigate(Home(Ece8), context);
       }
       if (SelectedBranch == 'Civil' && SelectedSem == 'Third') {
         SelectedCourse = null;
         Courses = Civil3Courses;
-        return bottomNavigate(Home(Civil3));
+        return bottomNavigate(Home(Civil3), context);
       } else
         return preferenceView();
     } else

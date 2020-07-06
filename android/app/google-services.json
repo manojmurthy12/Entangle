@@ -15,11 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "374462319231-pusr1s3p9gkhf88arp43j6907ord9qja.apps.googleusercontent.com",
+          "client_id": "374462319231-8sl45lb3mk8jtckqm932domqf6a5vtl4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.quantumloop.entangle",
             "certificate_hash": "6b6fc0d6074450d0cfe65085fd443a673b694d0f"
+          }
+        },
+        {
+          "client_id": "374462319231-u3ol0d1t4pfp40iaeovpgnc18ja01oc1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quantumloop.entangle",
+            "certificate_hash": "87ecdf81e7dff53c8ed23f2589d56ea26fe8cadc"
           }
         },
         {

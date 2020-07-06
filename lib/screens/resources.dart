@@ -56,60 +56,79 @@ class _ResourceScreenState extends State<ResourceScreen> {
       );
     }
 
-    return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            iconTheme: IconThemeData(color: Colors.white),
-            backgroundColor: Colors.indigo,
-            title: Text(
-              Courses[SubjectNumber],
-              style: TextStyle(fontFamily: 'Staatliches', color: Colors.white),
-            ),
-            bottom: TabBar(
-                indicatorWeight: 2,
-                indicatorColor: Colors.white,
-                tabs: <Widget>[
-                  Tab(
-                    icon: Icon(Icons.video_library),
-                    child: Text(
-                      'Videos',
-                      style: TextStyle(fontSize: 10),
-                    ),
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FirstScreen(),
+          ),
+        );
+      },
+      child: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              leading: BackButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FirstScreen(),
                   ),
-                  Tab(
+                ),
+              ),
+              iconTheme: IconThemeData(color: Colors.white),
+              backgroundColor: Colors.indigo,
+              title: Text(
+                Courses[SubjectNumber],
+                style:
+                    TextStyle(fontFamily: 'Staatliches', color: Colors.white),
+              ),
+              bottom: TabBar(
+                  indicatorWeight: 2,
+                  indicatorColor: Colors.white,
+                  tabs: <Widget>[
+                    Tab(
+                      icon: Icon(Icons.video_library),
                       child: Text(
-                        'Files',
+                        'Videos',
                         style: TextStyle(fontSize: 10),
                       ),
-                      icon: Icon(
-                        Icons.file_download,
-                      )),
-                ]),
-          ),
-          body: TabBarView(children: <Widget>[
-            ListView(
-              children: [
-                if (SelectedCourse == null)
-                  nothingtoshow2()
-                else
-                  for (Topic = 0;
-                      Topic < SelectedCourse[SubjectNumber].length;
-                      Topic++)
-                    buildModule(Topic),
-              ],
+                    ),
+                    Tab(
+                        child: Text(
+                          'Files',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                        icon: Icon(
+                          Icons.file_download,
+                        )),
+                  ]),
             ),
-            ListView(
-              children: [
-                FlatButton(
-                    onPressed: () {
-                      nothingtoshow();
-                    },
-                    child: Text('download'))
-              ],
-            ),
-          ]),
-        ));
+            body: TabBarView(children: <Widget>[
+              ListView(
+                children: [
+                  if (SelectedCourse[SubjectNumber].length == 0)
+                    nothingtoshow2()
+                  else
+                    for (Topic = 0;
+                        Topic < SelectedCourse[SubjectNumber].length;
+                        Topic++)
+                      buildModule(Topic),
+                ],
+              ),
+              ListView(
+                children: [
+                  FlatButton(
+                      onPressed: () {
+                        nothingtoshow();
+                      },
+                      child: Text('download'))
+                ],
+              ),
+            ]),
+          )),
+    );
   }
 }

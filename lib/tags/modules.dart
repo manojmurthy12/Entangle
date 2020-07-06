@@ -17,7 +17,7 @@ List<List<List<String>>> Pcycletopics = [
     [
       'Module-1',
       'Differential equations-1',
-      'Linear differential equations with contant co-efficients'
+      'Linear differential equations with constant co-efficients'
     ],
     [
       'Module-2',
@@ -72,25 +72,16 @@ List<List<List<String>>> Pcycletopics = [
       'Turbines and I.C Engines',
       'Gas Turbines',
       'Water Turbines',
-      'Internal Combustion Engines'
     ],
     [
       'Module-3',
-      'Machine Tolls and Automation',
+      'Machine Tools and Automation',
       'Robotics and Automation',
-      'Robotics',
-      'Automation'
     ],
-    [
-      'Module-4',
-      'Engineering Materials',
-      'Composites',
-      'Soldering,Brazing and Welding '
-    ],
+    ['Module-4', 'Engineering Materials', 'Soldering,Brazing and Welding '],
     [
       'Module-5',
       'Refrigeration and Air Conditioner',
-      'Refrigerants',
     ]
   ],
   //Civil engg
@@ -104,51 +95,42 @@ List<List<List<String>>> Pcycletopics = [
     ],
     [
       'Module-3',
-      'Equilibrium of force sand friction',
+      'Equilibrium of forces and friction',
       'Support Reaction',
-      'Friction',
     ],
     [
       'Module-4',
-      'Centroid and Moment of Inertia of Engineering Sections ',
+      'Centroid ',
       'Moment of Inertia',
     ],
     ['Module-5', 'Kinematics']
   ],
   //Workshop Practice
   [
-    ['Demonstration And Use of Hand Tools'],
-    ['Welding'],
-    ['Sheet Metal and Soldering work'],
-    ['Study and Demonstration of Power Tools'],
+    ['Experiment-1', 'Demonstration And Use of Hand Tools'],
+    ['Experiment-2', 'Welding'],
+    ['Experiment-3', 'Sheet Metal and Soldering work'],
+    ['Experiment-4', 'Study and Demonstration of Power Tools'],
   ],
   //Physics Lab
   [
-    ['Black Box to Determine unknown L C And R'],
-    ['Series and Parallel LCR Circuits '],
-    ['I-V Characteristics of Zener Diode'],
-    ['characteristics of Transistor'],
-    ['Photo Diode Characteristics'],
-    ['Dielectric Constant'],
-    ['Diffraction'],
-    ['Torsional Pendullum'],
-    ['Determination Fermi Energy'],
-    ['Uniform Bending Experiment'],
-    ['Newtons Rings'],
-    ['Verification of Stefans Law']
+    ['Experiment-1', 'Black Box to Determine unknown L C And R'],
+    ['Experiment-2', 'Series and Parallel LCR Circuits '],
+    ['Experiment-3', 'I-V Characteristics of Zener Diode'],
+    ['Experiment-4', 'characteristics of Transistor'],
+    ['Experiment-5', 'Photo Diode Characteristics'],
+    ['Experiment-6', 'Dielectric Constant'],
+    ['Experiment-7', 'Diffraction'],
+    ['Experiment-8', 'Torsional Pendullum'],
+    ['Experiment-9', 'Determination Fermi Energy'],
+    ['Experiment-10', 'Uniform Bending Experiment'],
+    ['Experiment-11', 'Newtons Rings'],
+    ['Experiment-12', 'Verification of Stefans Law']
   ],
   //Constitution of india
-  [
-    ['Module-1'],
-    ['Module-2'],
-    ['Module-3'],
-    ['Module-4'],
-    ['Module-5']
-  ],
+  [],
   //Kannada
-  [
-    ['nothing to show yet'],
-  ],
+  [],
 ];
 
 List<List<List<String>>> Ccycletopics = [
@@ -264,15 +246,7 @@ List<List<List<String>>> Ccycletopics = [
     ['Volumetric Experiments'],
   ],
   //Environmental Studies
-  [
-    ['Module-1'],
-    ['Module-2'],
-    ['Module-3'],
-    ['Module-4'],
-    ['Module-5']
-  ],
+  [],
   //English
-  [
-    ['nothing to show yet'],
-  ],
+  [],
 ];
