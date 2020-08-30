@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:entangle/preferences.dart';
+import 'package:entangle/main.dart';
 
 Scaffold signin() {
   return Scaffold(
+    backgroundColor: Colors.white,
     body: SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.all(32),
@@ -10,20 +12,22 @@ Scaffold signin() {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Column(
-                children: [
-                  Image.asset(
-                    'images/entangle.png',
-                    scale: 6,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Entangle',
-                    style: TextStyle(fontFamily: 'Comfortaa', fontSize: 25),
-                  )
-                ],
+              SizedBox(
+                height: 100,
+              ),
+              Image.asset(
+                'images/entangle.png',
+                scale: 6,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Entangle',
+                style: TextStyle(
+                    fontFamily: mainfont,
+                    fontSize: 25,
+                    color: Colors.grey[800]),
               ),
               SizedBox(
                 height: 200,
@@ -40,9 +44,9 @@ Scaffold signin() {
                       'images/google.png',
                       scale: 15,
                     ),
-                    title: const Text('Sign in with Google',
+                    title: Text('Sign in with Google',
                         style: TextStyle(
-                            fontFamily: 'Staatliches', color: Colors.black)),
+                            fontFamily: mainfont, color: Colors.blueGrey)),
                   ),
                 ),
               ),

@@ -30,8 +30,7 @@ class _ResourceScreenState extends State<ResourceScreen> {
                 ),
                 title: Text(
                   SelectedCourse[SubjectNumber][Topic][0],
-                  style:
-                      TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
+                  style: TextStyle(color: Colors.black, fontFamily: mainfont),
                 ),
               ),
               for (SubtopicNumber = 1;
@@ -44,10 +43,7 @@ class _ResourceScreenState extends State<ResourceScreen> {
                   ),
                   title: Text(
                     SelectedCourse[SubjectNumber][Topic][SubtopicNumber],
-                    style: TextStyle(
-                        color: Colors.blueGrey,
-                        fontSize: 12,
-                        fontFamily: 'Oswald'),
+                    style: TextStyle(color: Colors.blueGrey, fontSize: 12),
                   ),
                 ),
             ],
@@ -79,11 +75,11 @@ class _ResourceScreenState extends State<ResourceScreen> {
                 ),
               ),
               iconTheme: IconThemeData(color: Colors.white),
-              backgroundColor: Colors.indigo,
+              backgroundColor: maincolor,
               title: Text(
                 Courses[SubjectNumber],
-                style:
-                    TextStyle(fontFamily: 'Staatliches', color: Colors.white),
+                style: TextStyle(
+                    fontFamily: mainfont, color: Colors.white, fontSize: 18),
               ),
               bottom: TabBar(
                   indicatorWeight: 2,
@@ -110,7 +106,7 @@ class _ResourceScreenState extends State<ResourceScreen> {
               ListView(
                 children: [
                   if (SelectedCourse[SubjectNumber].length == 0)
-                    nothingtoshow2()
+                    nothingtoshow()
                   else
                     for (Topic = 0;
                         Topic < SelectedCourse[SubjectNumber].length;

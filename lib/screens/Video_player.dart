@@ -141,7 +141,7 @@ class _playerState extends State<player> {
                             IconButton(
                                 icon: Icon(
                                   Icons.share,
-                                  color: Colors.indigo,
+                                  color: maincolor,
                                 ),
                                 onPressed: () {
                                   Share.share('$VideoUrl');
@@ -197,7 +197,7 @@ class _playerState extends State<player> {
                                   child: ListTile(
                                     leading: Icon(
                                       Icons.play_circle_filled,
-                                      color: Colors.indigo,
+                                      color: maincolor,
                                     ),
                                     title: Text(
                                       SelectedCourseVideo[SubjectNumber]
@@ -205,7 +205,7 @@ class _playerState extends State<player> {
                                           [video],
                                       style: TextStyle(
                                           color: (VideoNumber == video)
-                                              ? Colors.indigo
+                                              ? maincolor
                                               : Colors.black),
                                     ),
                                   ),

@@ -1,15 +1,16 @@
+import 'package:entangle/screens/SearchScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'profile.dart';
 import 'saved.dart';
-import 'package:entangle/signin.dart';
+import 'package:entangle/main.dart';
 
 int _currentindex = 0;
 
 WillPopScope bottomNavigate(WillPopScope sem, BuildContext context) {
   WillPopScope tabs(int index, WillPopScope semTab) {
     if (index == 0) return semTab;
-    if (index == 1) return save(context);
+    if (index == 1) return WillPopScope(child: search(), onWillPop: null);
+    if (index == 2) return save(context);
   }
 
   return WillPopScope(
@@ -17,24 +18,35 @@ WillPopScope bottomNavigate(WillPopScope sem, BuildContext context) {
     child: Scaffold(
       body: tabs(_currentindex, sem),
       bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: Colors.blueGrey,
-        selectedItemColor: Colors.indigo,
+        unselectedItemColor: Colors.grey,
+        selectedItemColor: maincolor,
         currentIndex: _currentindex,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
         selectedIconTheme: IconThemeData(size: 25),
-        unselectedIconTheme: IconThemeData(size: 20),
         type: BottomNavigationBarType.fixed,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
+            icon: Image.asset(
+              'images/entangle.png',
+              scale: 25,
+            ),
+            title: Text('Home',
+                style: TextStyle(color: Colors.grey, fontSize: 10)),
           ),
           BottomNavigationBarItem(
-            icon: (_currentindex != 1)
+            icon: Icon(Icons.search),
+            title: Text(
+              'Serach',
+              style: TextStyle(color: Colors.grey, fontSize: 10),
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: (_currentindex != 2)
                 ? Icon(Icons.bookmark_border)
                 : Icon(Icons.bookmark),
-            title: Text('Saved'),
+            title: Text('Saved',
+                style: TextStyle(color: Colors.grey, fontSize: 10)),
           ),
         ],
         onTap: (index) {

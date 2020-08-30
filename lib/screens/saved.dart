@@ -30,7 +30,7 @@ WillPopScope save(BuildContext context) {
                 child: ListTile(
                   leading: Icon(
                     Icons.play_circle_filled,
-                    color: Colors.indigo,
+                    color: maincolor,
                   ),
                   title: Text(
                     SavedVideo[video],
@@ -60,21 +60,21 @@ WillPopScope save(BuildContext context) {
   return WillPopScope(
     onWillPop: () => SystemNavigator.pop(),
     child: Scaffold(
-      appBar: AppBar(
-        leading: Image.asset(
-          'images/entangle.png',
-          scale: 20,
-        ),
-        backgroundColor: Colors.white,
-        title: Text(
-          'Saved Videos',
-          style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
-        ),
-      ),
       backgroundColor: Colors.white,
       body: ListView(
         children: [
-          if (SavedVideo.length != 0) buildVideo() else nothingtoshow()
+          if (SavedVideo.length != 0)
+            Column(
+              children: [
+                Image.asset(
+                  'images/saved.jpg',
+                  scale: 10,
+                ),
+                buildVideo()
+              ],
+            )
+          else
+            nothingtoshow2()
         ],
       ),
     ),

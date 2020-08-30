@@ -1,16 +1,15 @@
 import 'package:entangle/screens/Sign_in.dart';
 import 'package:entangle/tags/VideoLinks.dart';
-import 'package:entangle/tags/VideoNames.dart';
 import 'package:entangle/tags/modules.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'screens/splashscreen.dart';
 import 'screens/home.dart';
 import 'preferences.dart';
 import 'screens/resources.dart';
 import 'tags/courses.dart';
 import 'tags/ImageTags.dart';
-import 'dart:async';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:convert' show json;
 import "package:http/http.dart" as http;
@@ -23,6 +22,9 @@ void main() {
   runApp(MaterialApp(home: Splash()));
 }
 
+Color maincolor = Color.fromRGBO(113, 170, 239, 1);
+Color maincolor2 = Color.fromRGBO(209, 144, 226, 1);
+String mainfont = 'OpenSans';
 String SelectedName = '';
 String SelectedSem =
     ''; // this variable will be used to store the present status of the branch and Semester
@@ -52,9 +54,9 @@ List<String> Courses = [];
 
 List<List<List<String>>> SelectedCourse = [];
 
-List<List<List<List<String>>>> SelectedCourseVideo = [];
+List<List<List<List>>> SelectedCourseVideo = [];
 
-List<List<List<List<String>>>> SelectedCourseVideolinks = [];
+List<List<List<List>>> SelectedCourseVideolinks = [];
 
 List<String> SavedVideo = [];
 List<String> SavedLink = [];
@@ -112,158 +114,176 @@ class _FirstScreenState extends State<FirstScreen> {
 
   Container preference() {
     return Container(
-      color: Colors.white,
+      color: maincolor,
       child: ListView(
         children: [
           Image.asset(
-            'images/course.jpg',
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Column(
-            children: [
-              ListTile(
-                leading: GoogleUserCircleAvatar(
-                  identity: currentUser,
-                ),
-                title: Text(currentUser.displayName ?? ''),
-                subtitle: Text(currentUser.email ?? ''),
-              ),
-              Container(
-                child: RaisedButton(
-                  child: const Text('SIGN OUT'),
-                  onPressed: handleSignOut,
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 80),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          ListTile(
-            leading: Image.asset(
-              'images/semester.png',
-              scale: 15,
-            ),
-            title: Text(
-              'Semester',
-              style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
-            ),
-            trailing: DropdownButton<String>(
-              value: semester,
-              icon: Icon(Icons.arrow_drop_down),
-              iconSize: 24,
-              elevation: 16,
-              items: <String>[
-                'P-Cycle',
-                'C-Cycle',
-                'Third',
-                'Fourth',
-                'Fifth',
-                'Sixth',
-                'Seventh',
-                'Eighth'
-              ].map<DropdownMenuItem<String>>((String value1) {
-                return DropdownMenuItem<String>(
-                  value: value1,
-                  child: Text(
-                    value1.toString(),
-                    style: TextStyle(
-                        color: Colors.grey, fontFamily: 'Staatliches'),
-                  ),
-                );
-              }).toList(),
-              onChanged: (String newValue) {
-                setState(() {
-                  semester = newValue;
-                });
-              },
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          ListTile(
-            leading: Image.asset(
-              'images/branch.png',
-              scale: 15,
-            ),
-            title: Text(
-              'Branch',
-              style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
-            ),
-            trailing: DropdownButton<String>(
-              autofocus: true,
-              value: branch,
-              icon: Icon(Icons.arrow_drop_down),
-              iconSize: 24,
-              elevation: 16,
-              items: <String>[
-                'ECE',
-                'CSE',
-                'EEE',
-                'Civil',
-                'Mechanical',
-                'ISE',
-                'Other',
-              ].map<DropdownMenuItem<String>>((String value2) {
-                return DropdownMenuItem<String>(
-                  value: value2,
-                  child: Text(
-                    value2.toString(),
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontFamily: 'Staatliches',
-                    ),
-                  ),
-                );
-              }).toList(),
-              onChanged: (String newValue) {
-                setState(() {
-                  branch = newValue;
-                });
-              },
-            ),
-          ),
-          SizedBox(
-            height: 20,
+            'images/setting.jpg',
+            scale: 6,
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 40),
-            child: RaisedButton(
-              color: Colors.indigo,
-              onPressed: () {
-                setState(() {
-                  setBranch(branch);
-                  setSem(semester);
-                  if (name != '' || name != null) setName(name);
-                });
-              },
-              child: Text(
-                '  Submit  ',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Staatliches',
-                    fontSize: 20),
-              ),
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [maincolor, Colors.white],
+                    end: Alignment.topCenter,
+                    begin: Alignment.bottomCenter)),
+            child: Column(
+              children: [
+                ListTile(
+                  leading: GoogleUserCircleAvatar(
+                    identity: currentUser,
+                  ),
+                  title: Text(currentUser.displayName ?? ''),
+                  subtitle: Text(currentUser.email ?? ''),
+                ),
+                Container(
+                  child: FlatButton(
+                    color: Colors.grey[100],
+                    child: const Text(
+                      'Sign out',
+                      style: TextStyle(fontSize: 10, color: Colors.grey),
+                    ),
+                    onPressed: handleSignOut,
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 80),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                ListTile(
+                  leading: Image.asset(
+                    'images/semester.png',
+                    scale: 15,
+                  ),
+                  title: Text(
+                    'Semester',
+                    style: TextStyle(color: Colors.white, fontFamily: mainfont),
+                  ),
+                  trailing: DropdownButton<String>(
+                    value: semester,
+                    icon: Icon(Icons.arrow_drop_down),
+                    iconSize: 24,
+                    elevation: 16,
+                    items: <String>[
+                      'P-Cycle',
+                      'C-Cycle',
+                      'Third',
+                      'Fourth',
+                      'Fifth',
+                      'Sixth',
+                      'Seventh',
+                      'Eighth'
+                    ].map<DropdownMenuItem<String>>((String value1) {
+                      return DropdownMenuItem<String>(
+                        value: value1,
+                        child: Text(
+                          value1.toString(),
+                          style: TextStyle(
+                              color: Colors.blueGrey,
+                              fontFamily: mainfont,
+                              fontSize: 14),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        semester = newValue;
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                ListTile(
+                  leading: Image.asset(
+                    'images/branch.png',
+                    scale: 15,
+                  ),
+                  title: Text(
+                    'Branch',
+                    style: TextStyle(color: Colors.white, fontFamily: mainfont),
+                  ),
+                  trailing: DropdownButton<String>(
+                    autofocus: false,
+                    value: branch,
+                    icon: Icon(Icons.arrow_drop_down),
+                    iconSize: 24,
+                    elevation: 16,
+                    items: <String>[
+                      'ECE',
+                      'CSE',
+                      'EEE',
+                      'Civil',
+                      'Mechanical',
+                      'ISE',
+                      'Other',
+                    ].map<DropdownMenuItem<String>>((String value2) {
+                      return DropdownMenuItem<String>(
+                        value: value2,
+                        child: Text(
+                          value2.toString(),
+                          style: TextStyle(
+                              color: Colors.blueGrey,
+                              fontFamily: mainfont,
+                              fontSize: 14),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        branch = newValue;
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 70),
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                        side: BorderSide(color: Colors.blue[800], width: 5)),
+                    color: maincolor,
+                    onPressed: () {
+                      setState(() {
+                        setBranch(branch);
+                        setSem(semester);
+                        if (name != '' || name != null) setName(name);
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: Text(
+                      '  SUBMIT  ',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Roboto-bold',
+                          fontSize: 14),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 60,
+                ),
+                FlatButton.icon(
+                  onPressed: () {
+                    Share.share(
+                        'https://play.google.com/store/apps/details?id=com.quantumloop.weplay'); //TODO: Change the app id
+                  },
+                  icon: Icon(
+                    Icons.share,
+                    color: Colors.white60,
+                  ),
+                  label: Text(
+                    'Share this app with your friends',
+                    style: TextStyle(color: Colors.white60),
+                  ),
+                )
+              ],
             ),
           ),
-          SizedBox(
-            height: 60,
-          ),
-          FlatButton.icon(
-            onPressed: () {
-              Share.share(
-                  'https://play.google.com/store/apps/details?id=com.quantumloop.weplay'); //TODO: Change the app id
-            },
-            icon: Icon(
-              Icons.share,
-              color: Colors.indigo,
-            ),
-            label: Text('Share this app with your friends'),
-          )
         ],
       ),
     );
@@ -272,17 +292,6 @@ class _FirstScreenState extends State<FirstScreen> {
   Scaffold preferenceView() {
     if (currentUser != null)
       return Scaffold(
-        appBar: AppBar(
-          leading: Image.asset(
-            'images/entangle.png',
-            scale: 20,
-          ),
-          backgroundColor: Colors.white,
-          title: Text(
-            'Select your Preferences',
-            style: TextStyle(color: Colors.black, fontFamily: 'Bebas Neue'),
-          ),
-        ),
         body: preference(),
       );
     else
@@ -310,7 +319,8 @@ class _FirstScreenState extends State<FirstScreen> {
         ),
         title: Text(
           Courses[course],
-          style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
+          style: TextStyle(
+              color: Colors.grey[800], fontFamily: mainfont, fontSize: 13),
         ),
       ),
     );
@@ -321,45 +331,41 @@ class _FirstScreenState extends State<FirstScreen> {
     return WillPopScope(
       onWillPop: () => SystemNavigator.pop(),
       child: Scaffold(
-        endDrawer: setting(),
+        drawer: setting(),
         appBar: AppBar(
-          leading: Image.asset(
-            'images/entangle.png',
-            scale: 20,
-          ),
-          actions: [
-            Builder(
-              builder: (context) => IconButton(
-                icon: Icon(
-                  Icons.settings,
-                  color: Colors.indigo,
-                ),
-                onPressed: () => Scaffold.of(context).openEndDrawer(),
-                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: Icon(
+                Icons.menu,
+                color: Colors.white,
               ),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
             ),
-            SizedBox(
-              width: 20,
-            )
-          ],
-          backgroundColor: Colors.white,
-          title: Text(
-            'Entangle',
-            style: TextStyle(color: Colors.black, fontFamily: 'Staatliches'),
           ),
+          backgroundColor: maincolor,
         ),
-        body: ListView(
-          children: [
-            Card(
-              color: Colors.lightBlueAccent,
-              child: Image.asset(
-                'images/courses.jpg',
-                scale: 1,
+        body: Container(
+          child: ListView(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: [maincolor, Colors.white],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter)),
+                child: Card(
+                  color: Colors.lightBlueAccent,
+                  child: Image.asset(
+                    'images/MainBanner.jpg',
+                    scale: 1,
+                  ),
+                ),
               ),
-            ),
-            for (int index = 0; index < image.length; index++)
-              buildSubject(index, imageTag[index]),
-          ],
+              for (int index = 0; index < image.length; index++)
+                buildSubject(index, imageTag[index]),
+            ],
+          ),
         ),
       ),
     );
@@ -405,13 +411,39 @@ class _FirstScreenState extends State<FirstScreen> {
       if (SelectedSem == 'P-Cycle') {
         SelectedCourse = Pcycletopics;
         Courses = PcycleCourses;
-        SelectedCourseVideo = PcycleVideos;
-        SelectedCourseVideolinks = PcycleVideoLinks;
+        for (int i = 0; i < PcycleVideoLinks.length; i++) {
+          SelectedCourseVideolinks.add([]);
+          SelectedCourseVideo.add([]);
+          for (int j = 0; j < PcycleVideoLinks[i].length; j++) {
+            SelectedCourseVideolinks[i].add([]);
+            SelectedCourseVideo[i].add([]);
+            for (int k = 0; k < PcycleVideoLinks[i][j].length; k++) {
+              var temp = PcycleVideoLinks[i][j][k].keys.toList();
+              var temp2 = PcycleVideoLinks[i][j][k].values.toList();
+              SelectedCourseVideolinks[i][j].add(temp);
+              SelectedCourseVideo[i][j].add(temp2);
+            }
+          }
+        }
         return bottomNavigate(Home(Pcycle), context);
       }
       if (SelectedSem == 'C-Cycle') {
         SelectedCourse = Ccycletopics;
         Courses = CcycleCourses;
+        for (int i = 0; i < CcycleVideoLinks.length; i++) {
+          SelectedCourseVideolinks.add([]);
+          SelectedCourseVideo.add([]);
+          for (int j = 0; j < CcycleVideoLinks[i].length; j++) {
+            SelectedCourseVideolinks[i].add([]);
+            SelectedCourseVideo[i].add([]);
+            for (int k = 0; k < CcycleVideoLinks[i][j].length; k++) {
+              var temp = CcycleVideoLinks[i][j][k].keys.toList();
+              var temp2 = CcycleVideoLinks[i][j][k].values.toList();
+              SelectedCourseVideolinks[i][j].add(temp);
+              SelectedCourseVideo[i][j].add(temp2);
+            }
+          }
+        }
         return bottomNavigate(Home(Ccycle), context);
       }
       if (SelectedBranch == 'ECE' && SelectedSem == 'Third') {

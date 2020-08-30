@@ -1,8 +1,6 @@
 import 'package:entangle/screens/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:entangle/main.dart';
-import 'package:entangle/tags/VideoNames.dart';
-import 'package:entangle/tags/VideoLinks.dart';
 import 'package:entangle/screens/Video_player.dart';
 import 'package:entangle/preferences.dart';
 
@@ -16,7 +14,7 @@ Icon save = Icon(
 );
 Icon saved = Icon(
   Icons.bookmark,
-  color: Colors.indigo,
+  color: maincolor,
 );
 
 class _VideotagsState extends State<Videotags> {
@@ -28,7 +26,7 @@ class _VideotagsState extends State<Videotags> {
           ListTile(
             title: Text(
               SelectedCourse[SubjectNumber][TopicNumber][Subtopic],
-              style: TextStyle(fontFamily: 'Staatliches'),
+              style: TextStyle(fontFamily: mainfont),
             ),
           ),
           for (int video = 0;
@@ -63,11 +61,12 @@ class _VideotagsState extends State<Videotags> {
                   child: ListTile(
                     leading: Icon(
                       Icons.play_circle_filled,
-                      color: Colors.indigo,
+                      color: maincolor,
                     ),
                     title: Text(
                       SelectedCourseVideo[SubjectNumber][TopicNumber]
                           [Subtopic - 1][video],
+                      style: TextStyle(color: Colors.blueGrey),
                     ),
                     trailing: IconButton(
                         icon: (!SavedVideo.contains(
@@ -134,10 +133,10 @@ class _VideotagsState extends State<Videotags> {
                 ),
               ),
             ),
-            backgroundColor: Colors.indigo,
+            backgroundColor: maincolor,
             title: Text(
               SelectedCourse[SubjectNumber][TopicNumber][0],
-              style: TextStyle(color: Colors.white, fontFamily: 'Staatliches'),
+              style: TextStyle(color: Colors.white, fontFamily: mainfont),
             ),
           ),
           backgroundColor: Colors.white,
@@ -165,10 +164,10 @@ class _VideotagsState extends State<Videotags> {
                 ),
               ),
             ),
-            backgroundColor: Colors.indigo,
+            backgroundColor: maincolor,
             title: Text(
               SelectedCourse[SubjectNumber][TopicNumber][0],
-              style: TextStyle(color: Colors.white, fontFamily: 'Staatliches'),
+              style: TextStyle(color: Colors.white, fontFamily: mainfont),
             ),
           ),
           body: ListView(
