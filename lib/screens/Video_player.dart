@@ -104,12 +104,19 @@ class _playerState extends State<player> {
               child: ListView(
                 children: [
                   Container(
-                    color: Colors.grey[200],
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [maincolor, Colors.grey[100]],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter)),
                     child: Column(
                       children: [
                         Center(
                           child: ListTile(
-                            title: Text(VideoTitle),
+                            title: Text(
+                              VideoTitle,
+                              style: TextStyle(color: Colors.white),
+                            ),
                             autofocus: true,
                             trailing: FlatButton(
                               onPressed: () {
@@ -125,7 +132,7 @@ class _playerState extends State<player> {
                                   Text(
                                     'Open in YouTube',
                                     style: TextStyle(
-                                        fontSize: 8, color: Colors.grey),
+                                        fontSize: 8, color: Colors.white),
                                   )
                                 ],
                               ),
@@ -133,7 +140,7 @@ class _playerState extends State<player> {
                           ),
                         ),
                         Divider(
-                          color: Colors.grey,
+                          color: Colors.white60,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

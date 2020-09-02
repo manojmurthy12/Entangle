@@ -66,6 +66,13 @@ class _ResourceScreenState extends State<ResourceScreen> {
           child: Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: [maincolor2, maincolor],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter)),
+              ),
               leading: BackButton(
                 onPressed: () => Navigator.push(
                   context,
@@ -75,7 +82,6 @@ class _ResourceScreenState extends State<ResourceScreen> {
                 ),
               ),
               iconTheme: IconThemeData(color: Colors.white),
-              backgroundColor: maincolor,
               title: Text(
                 Courses[SubjectNumber],
                 style: TextStyle(

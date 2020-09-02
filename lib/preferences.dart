@@ -1,4 +1,5 @@
 import 'package:entangle/main.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<String> getName() async {
@@ -8,6 +9,35 @@ Future<String> getName() async {
     return SelectedName;
   else
     return _nameSelect;
+}
+
+Future<String> getEmail() async {
+  final prefs = await SharedPreferences.getInstance();
+  final _emailSelect = prefs.getString('email');
+  if (_emailSelect == null || _emailSelect == '')
+    return null;
+  else
+    return _emailSelect;
+}
+
+Future<void> setEmail(String email) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('email', email);
+  print(email);
+}
+
+Future<String> getPassword() async {
+  final prefs = await SharedPreferences.getInstance();
+  final _passwordSelect = prefs.getString('password');
+  if (_passwordSelect == null || _passwordSelect == '')
+    return null;
+  else
+    return _passwordSelect;
+}
+
+Future<void> setPassword(String password) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('password', password);
 }
 
 Future<void> setName(String name) async {
@@ -42,16 +72,6 @@ Future<void> setBranch(String branch) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString('Branch', branch);
 }
-
-Future<void> handleSignIn() async {
-  try {
-    await googleSignIn.signIn();
-  } catch (error) {
-    print(error);
-  }
-}
-
-Future<void> handleSignOut() => googleSignIn.disconnect();
 
 Future<List<String>> getSavedVideo() async {
   final prefs = await SharedPreferences.getInstance();

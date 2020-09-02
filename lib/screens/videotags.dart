@@ -14,7 +14,7 @@ Icon save = Icon(
 );
 Icon saved = Icon(
   Icons.bookmark,
-  color: maincolor,
+  color: maincolor2,
 );
 
 class _VideotagsState extends State<Videotags> {
@@ -124,23 +124,20 @@ class _VideotagsState extends State<Videotags> {
         },
         child: Scaffold(
           appBar: AppBar(
-            leading: BackButton(
-              color: Colors.white,
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ResourceScreen(),
-                ),
-              ),
-            ),
-            backgroundColor: maincolor,
             title: Text(
               SelectedCourse[SubjectNumber][TopicNumber][0],
               style: TextStyle(color: Colors.white, fontFamily: mainfont),
             ),
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [maincolor2, maincolor],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter)),
+            ),
           ),
-          backgroundColor: Colors.white,
           body: nothingtoshow(),
+          backgroundColor: Colors.white,
         ),
       );
     else
@@ -164,7 +161,13 @@ class _VideotagsState extends State<Videotags> {
                 ),
               ),
             ),
-            backgroundColor: maincolor,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [maincolor2, maincolor],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter)),
+            ),
             title: Text(
               SelectedCourse[SubjectNumber][TopicNumber][0],
               style: TextStyle(color: Colors.white, fontFamily: mainfont),

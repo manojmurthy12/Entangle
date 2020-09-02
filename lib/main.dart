@@ -1,25 +1,54 @@
-import 'package:entangle/screens/Sign_in.dart';
+import 'package:entangle/screens/No_Internet.dart';
+import 'package:entangle/screens/login_screen.dart';
 import 'package:entangle/tags/VideoLinks.dart';
 import 'package:entangle/tags/modules.dart';
+import 'package:entangle/utilities/AuthCredentials.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
-import 'screens/splashscreen.dart';
 import 'screens/home.dart';
 import 'preferences.dart';
 import 'screens/resources.dart';
 import 'tags/courses.dart';
 import 'tags/ImageTags.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'dart:convert' show json;
-import "package:http/http.dart" as http;
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:share/share.dart';
+import 'package:connectivity/connectivity.dart';
 
-GoogleSignIn googleSignIn;
-void main() {
-  runApp(MaterialApp(home: Splash()));
+String message = '';
+
+String userEmail, userPassword;
+var connectivityResult;
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MaterialApp(home: await getLandingPage()));
+}
+
+String usertitle;
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
+Future<Widget> getLandingPage() async {
+  connectivityResult = await (Connectivity().checkConnectivity());
+  return StreamBuilder<User>(
+    stream: _auth.authStateChanges(),
+    builder: (BuildContext context, snapshot) {
+      if ((snapshot.hasData && (!snapshot.data.isAnonymous)) ||
+          checkPersistence()) {
+        try {
+          print(_auth.currentUser.email);
+          usertitle = _auth.currentUser.email;
+        } catch (e) {
+          print(e);
+          usertitle = userEmail;
+        }
+
+        return FirstScreen();
+      } else
+        return LoginScreen();
+    },
+  );
 }
 
 Color maincolor = Color.fromRGBO(113, 170, 239, 1);
@@ -45,8 +74,6 @@ String name = '';
 String semester = 'P-Cycle';
 String branch = 'ECE';
 String phoneNumber;
-GoogleUserCircleAvatar userImage;
-GoogleSignInAccount currentUser;
 String contactText;
 bool fromSave = false;
 
@@ -60,7 +87,7 @@ List<List<List<List>>> SelectedCourseVideolinks = [];
 
 List<String> SavedVideo = [];
 List<String> SavedLink = [];
-
+bool logged_in = false;
 Container nothingtoshow() {
   return Container(
     child: Center(
@@ -94,18 +121,16 @@ Container nothingtoshow2() {
 }
 
 class FirstScreen extends StatefulWidget {
-  FirstScreen({Key key}) : super(key: key);
   @override
   _FirstScreenState createState() => _FirstScreenState();
 }
 
 class _FirstScreenState extends State<FirstScreen> {
   @override
-  void initState() {}
+  void initState() {
+    super.initState();
 
-  void dispose() {
-    controller.dispose();
-    super.dispose();
+    Firebase.initializeApp().whenComplete(() {});
   }
 
   Drawer setting() {
@@ -113,13 +138,17 @@ class _FirstScreenState extends State<FirstScreen> {
   }
 
   Container preference() {
+    User user = auth.currentUser;
     return Container(
       color: maincolor,
       child: ListView(
         children: [
-          Image.asset(
-            'images/setting.jpg',
-            scale: 6,
+          Container(
+            color: Colors.white,
+            child: Image.asset(
+              'images/setting.jpg',
+              scale: 6,
+            ),
           ),
           Container(
             decoration: BoxDecoration(
@@ -130,20 +159,37 @@ class _FirstScreenState extends State<FirstScreen> {
             child: Column(
               children: [
                 ListTile(
-                  leading: GoogleUserCircleAvatar(
-                    identity: currentUser,
+                  leading: CircleAvatar(
+                    child: Icon(
+                      Icons.person_outline,
+                      color: Colors.white60,
+                    ),
+                    backgroundColor: maincolor,
                   ),
-                  title: Text(currentUser.displayName ?? ''),
-                  subtitle: Text(currentUser.email ?? ''),
+                  title: Text(
+                    usertitle,
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  //subtitle: Text(_auth.currentUser.email),
                 ),
                 Container(
-                  child: FlatButton(
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(60.0),
+                    ),
                     color: Colors.grey[100],
                     child: const Text(
                       'Sign out',
                       style: TextStyle(fontSize: 10, color: Colors.grey),
                     ),
-                    onPressed: handleSignOut,
+                    onPressed: () {
+                      handleSignOut().whenComplete(
+                          () => Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              )));
+                    },
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 80),
                 ),
@@ -157,7 +203,11 @@ class _FirstScreenState extends State<FirstScreen> {
                   ),
                   title: Text(
                     'Semester',
-                    style: TextStyle(color: Colors.white, fontFamily: mainfont),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'OpenSans',
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   trailing: DropdownButton<String>(
                     value: semester,
@@ -202,7 +252,11 @@ class _FirstScreenState extends State<FirstScreen> {
                   ),
                   title: Text(
                     'Branch',
-                    style: TextStyle(color: Colors.white, fontFamily: mainfont),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'OpenSans',
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   trailing: DropdownButton<String>(
                     autofocus: false,
@@ -241,7 +295,6 @@ class _FirstScreenState extends State<FirstScreen> {
                   height: 20,
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 70),
                   child: RaisedButton(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18),
@@ -252,15 +305,20 @@ class _FirstScreenState extends State<FirstScreen> {
                         setBranch(branch);
                         setSem(semester);
                         if (name != '' || name != null) setName(name);
-                        Navigator.pop(context);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FirstScreen(),
+                            ));
                       });
                     },
                     child: Text(
-                      '  SUBMIT  ',
+                      '   SUBMIT   ',
                       style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Roboto-bold',
-                          fontSize: 14),
+                          fontFamily: 'OpenSans',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15),
                     ),
                   ),
                 ),
@@ -290,12 +348,9 @@ class _FirstScreenState extends State<FirstScreen> {
   }
 
   Scaffold preferenceView() {
-    if (currentUser != null)
-      return Scaffold(
-        body: preference(),
-      );
-    else
-      return signin();
+    return Scaffold(
+      body: preference(),
+    );
   }
 
   FlatButton buildSubject(int course, String image) {
@@ -312,15 +367,20 @@ class _FirstScreenState extends State<FirstScreen> {
           ),
         );
       },
-      child: ListTile(
-        leading: Image.asset(
-          'courseImages/$image.png',
-          scale: 15,
-        ),
-        title: Text(
-          Courses[course],
-          style: TextStyle(
-              color: Colors.grey[800], fontFamily: mainfont, fontSize: 13),
+      child: Container(
+        child: ListTile(
+          leading: Image.asset(
+            'courseImages/$image.png',
+            scale: 15,
+          ),
+          title: Text(
+            Courses[course],
+            style: TextStyle(
+                color: Colors.grey[800],
+                fontFamily: mainfont,
+                fontSize: 13,
+                fontWeight: FontWeight.w200),
+          ),
         ),
       ),
     );
@@ -373,13 +433,7 @@ class _FirstScreenState extends State<FirstScreen> {
 
   @override
   Widget build(BuildContext context) {
-    googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
-      setState(() {
-        currentUser = account;
-      });
-    });
-    googleSignIn.signInSilently();
-
+    setState(() {});
     getSem().then((value) {
       setState(() {
         SelectedSem = value;
@@ -407,7 +461,11 @@ class _FirstScreenState extends State<FirstScreen> {
       });
     });
 
-    if (currentUser != null) {
+    getLandingPage();
+
+    if (connectivityResult == ConnectivityResult.none) return No_Connection();
+
+    if (connectivityResult != ConnectivityResult.none) {
       if (SelectedSem == 'P-Cycle') {
         SelectedCourse = Pcycletopics;
         Courses = PcycleCourses;
@@ -482,7 +540,6 @@ class _FirstScreenState extends State<FirstScreen> {
         return bottomNavigate(Home(Civil3), context);
       } else
         return preferenceView();
-    } else
-      return preferenceView();
+    }
   }
 }
