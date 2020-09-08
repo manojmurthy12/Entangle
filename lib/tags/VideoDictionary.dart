@@ -422,10 +422,6 @@ List<List<List<Map>>> PcycleVideoLinks = [
       }
     ]
   ],
-  //Constitution of india
-  [[]],
-  //Kannada
-  [[]],
 ];
 
 List<List<List<Map>>> CcycleVideoLinks = [
@@ -683,8 +679,4 @@ List<List<List<Map>>> CcycleVideoLinks = [
       {}
     ],
   ],
-  //Environmental Studies
-  [[]],
-  //English
-  [[]],
 ];

@@ -182,6 +182,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     Firebase.initializeApp();
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: maincolor,
+        leading: IconButton(
+          icon: Icon(Icons.close),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
@@ -270,10 +277,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
           if (e.code == 'invalid-email')
             message = 'Enter the correct email-address.';
           else
-            message = 'ERROR, try again later';
+            message = 'An error occured, try again.';
         });
       }
     } else
-      message = 'An error occured, Try again';
+      message = 'An error occured, try again.';
   }
 }

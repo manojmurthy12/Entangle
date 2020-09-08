@@ -127,10 +127,6 @@ List<List<List<String>>> Pcycletopics = [
     ['Experiment-11', 'Newtons Rings'],
     ['Experiment-12', 'Verification of Stefans Law']
   ],
-  //Constitution of india
-  [],
-  //Kannada
-  [],
 ];
 
 List<List<List<String>>> Ccycletopics = [
@@ -245,8 +241,4 @@ List<List<List<String>>> Ccycletopics = [
     ['Instrumental Experiments'],
     ['Volumetric Experiments'],
   ],
-  //Environmental Studies
-  [],
-  //English
-  [],
 ];

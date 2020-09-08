@@ -17,6 +17,7 @@ final googleSignIn = GoogleSignIn();
 
 String email, password;
 final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+final GlobalKey<FormState> formKey3 = GlobalKey<FormState>();
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -416,7 +417,7 @@ class _LoginScreenState extends State<LoginScreen> {
           if (e.code == 'invalid-email')
             message = 'Enter the correct email-address.';
           else
-            message = 'ERROR, try again later';
+            message = 'An error occured, try again.';
         });
       }
     }
@@ -549,6 +550,13 @@ class _forgot_passwordState extends State<forgot_password> {
   Widget build(BuildContext context) {
     Firebase.initializeApp();
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: maincolor,
+        leading: IconButton(
+          icon: Icon(Icons.close),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
@@ -633,7 +641,7 @@ class _forgot_passwordState extends State<forgot_password> {
           if (e.code == 'invalid-email')
             _message = 'Enter the correct email-address.';
           else
-            _message = 'ERROR, try again later.';
+            _message = 'An error occured, try again.';
         });
       }
     }

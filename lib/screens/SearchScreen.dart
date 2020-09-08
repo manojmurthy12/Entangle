@@ -1,60 +1,57 @@
 import 'package:entangle/main.dart';
 import 'package:flutter/material.dart';
 import 'package:dartpedia/dartpedia.dart' as wiki;
+import 'package:flutter/services.dart';
+import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'package:entangle/Services/API.dart';
+import 'dart:convert';
 
-class search extends StatefulWidget {
+var data;
+String url;
+String QueryText = 'Query';
+
+class Search_screen extends StatefulWidget {
   @override
-  _searchState createState() => _searchState();
+  _Search_screenState createState() => _Search_screenState();
 }
 
-class _searchState extends State<search> {
+class _Search_screenState extends State<Search_screen> {
   @override
   Widget build(BuildContext context) {
-    var result = '';
-    void Query(String query) async {
-      var wikipediaPage = await wiki.page('Dart (programming language)');
-      setState(() {
-        result = wikipediaPage.summary();
-      });
-      var relatedTopics = await wiki.search('California');
-      print(relatedTopics);
-
-      print(wikipediaPage);
-    }
-
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        actions: [
-          SizedBox(
-            width: 10,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: SearchBar(
+            onSearch: search,
+            onItemFound: (Post post, int index) {
+              return ListTile(
+                title: Text(post.title),
+                subtitle: Text(post.description),
+              );
+            },
           ),
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  icon: Icon(Icons.search),
-                  hintText: 'Search'),
-              onChanged: (value) {
-                Query(value);
-              },
-              onSubmitted: (value) {
-                Query(value);
-              },
-            ),
-          ),
-        ],
-      ),
-      body: ListView(
-        children: [
-          Image.asset(
-            'images/search.jpg',
-            scale: 12,
-          ),
-          if (result == '') Text(result),
-        ],
+        ),
       ),
     );
   }
+}
+
+class Post {
+  final String title;
+  final String description;
+
+  Post(this.title, this.description);
+}
+
+Future<List<Post>> search(String search) async {
+  await Future.delayed(Duration(seconds: 3));
+  url = 'http://127.0.0.1:5000/api?Query=' + search;
+  data = await Getdata(url);
+  var DecodeData = jsonDecode(data);
+  QueryText = DecodeData['Query'];
+
+  return List.generate(1, (int index) {
+    return Post(QueryText, 'It worked');
+  });
 }

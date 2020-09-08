@@ -106,7 +106,7 @@ class _playerState extends State<player> {
                   Container(
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
-                            colors: [maincolor, Colors.grey[100]],
+                            colors: [Colors.white, Colors.grey[200]],
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter)),
                     child: Column(
@@ -115,7 +115,10 @@ class _playerState extends State<player> {
                           child: ListTile(
                             title: Text(
                               VideoTitle,
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: mainfont,
+                                  fontWeight: FontWeight.w700),
                             ),
                             autofocus: true,
                             trailing: FlatButton(
@@ -132,7 +135,7 @@ class _playerState extends State<player> {
                                   Text(
                                     'Open in YouTube',
                                     style: TextStyle(
-                                        fontSize: 8, color: Colors.white),
+                                        fontSize: 8, color: Colors.blueGrey),
                                   )
                                 ],
                               ),
@@ -140,7 +143,7 @@ class _playerState extends State<player> {
                           ),
                         ),
                         Divider(
-                          color: Colors.white60,
+                          color: Colors.grey[400],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -163,7 +166,7 @@ class _playerState extends State<player> {
                       child: Column(
                         children: [
                           Container(
-                            color: Colors.grey[100],
+                            color: Colors.grey[200],
                             child: ListTile(
                               leading: Text(
                                 'Up Next',
@@ -213,7 +216,239 @@ class _playerState extends State<player> {
                                       style: TextStyle(
                                           color: (VideoNumber == video)
                                               ? maincolor
-                                              : Colors.black),
+                                              : Colors.black,
+                                          fontFamily: (VideoNumber == video)
+                                              ? mainfont
+                                              : '',
+                                          fontWeight: (VideoNumber == video)
+                                              ? FontWeight.w500
+                                              : FontWeight.normal),
+                                    ),
+                                  ),
+                                ),
+                                Divider(
+                                  color: Colors.grey,
+                                )
+                              ],
+                            )
+                        ],
+                      ),
+                    )
+                ],
+              ),
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+}
+
+class player2 extends StatelessWidget {
+  YoutubePlayerController _controller;
+
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
+    @override
+    _launchURL(String url) async {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+
+    YoutubePlayer play() {
+      _controller = YoutubePlayerController(
+        initialVideoId: YoutubePlayer.convertUrlToId(VideoUrl),
+        flags: YoutubePlayerFlags(
+          mute: false,
+          autoPlay: true,
+          disableDragSeek: false,
+          loop: false,
+          isLive: false,
+          forceHD: false,
+          enableCaption: true,
+        ),
+      );
+      return YoutubePlayer(
+        controller: _controller,
+        topActions: [
+          BackButton(
+            color: Colors.white,
+          ),
+          Expanded(child: SizedBox()),
+          IconButton(
+              icon: Icon(
+                Icons.share,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Share.share('$VideoUrl');
+              }),
+        ],
+        bottomActions: [
+          CurrentPosition(),
+          ProgressBar(
+            isExpanded: true,
+          ),
+          RemainingDuration(),
+          SizedBox(
+            width: 20,
+          ),
+          PlaybackSpeedButton(),
+          FullScreenButton(),
+        ],
+      );
+    }
+
+    return WillPopScope(
+      onWillPop: () {
+        _controller.pause();
+        if (!fromSave)
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Videotags(),
+            ),
+          );
+        else
+          Navigator.pop(context);
+      },
+      child: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Column(children: [
+            play(),
+            Expanded(
+              child: ListView(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [Colors.white, Colors.grey[200]],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter)),
+                    child: Column(
+                      children: [
+                        Center(
+                          child: ListTile(
+                            title: Text(
+                              VideoTitle,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: mainfont,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            autofocus: true,
+                            trailing: FlatButton(
+                              onPressed: () {
+                                _launchURL(VideoUrl);
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.link,
+                                    color: Colors.red,
+                                  ),
+                                  Text(
+                                    'Open in YouTube',
+                                    style: TextStyle(
+                                        fontSize: 8, color: Colors.blueGrey),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Divider(
+                          color: Colors.grey[400],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            IconButton(
+                                icon: Icon(
+                                  Icons.share,
+                                  color: maincolor,
+                                ),
+                                onPressed: () {
+                                  Share.share('$VideoUrl');
+                                })
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (!fromSave)
+                    SizedBox(
+                      child: Column(
+                        children: [
+                          Container(
+                            color: Colors.grey[200],
+                            child: ListTile(
+                              leading: Text(
+                                'Up Next',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              trailing: Icon(Icons.keyboard_arrow_down,
+                                  color: Colors.grey),
+                            ),
+                          ),
+                          for (int video = 0;
+                              video <
+                                  SelectedCourseVideo[SubjectNumber]
+                                          [TopicNumber][SubtopicNumber - 1]
+                                      .length;
+                              video++)
+                            Column(
+                              children: [
+                                FlatButton(
+                                  onPressed: () {
+                                    _controller.pause();
+                                    SubtopicNumber = SubtopicNumber;
+                                    VideoNumber = video;
+                                    VideoUrl =
+                                        SelectedCourseVideolinks[SubjectNumber]
+                                                [TopicNumber]
+                                            [SubtopicNumber - 1][VideoNumber];
+                                    VideoTitle =
+                                        SelectedCourseVideo[SubjectNumber]
+                                                [TopicNumber]
+                                            [SubtopicNumber - 1][VideoNumber];
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => player(),
+                                      ),
+                                    );
+                                  },
+                                  child: ListTile(
+                                    leading: Icon(
+                                      Icons.play_circle_filled,
+                                      color: maincolor,
+                                    ),
+                                    title: Text(
+                                      SelectedCourseVideo[SubjectNumber]
+                                              [TopicNumber][SubtopicNumber - 1]
+                                          [video],
+                                      style: TextStyle(
+                                          color: (VideoNumber == video)
+                                              ? maincolor
+                                              : Colors.black,
+                                          fontFamily: (VideoNumber == video)
+                                              ? mainfont
+                                              : '',
+                                          fontWeight: (VideoNumber == video)
+                                              ? FontWeight.w500
+                                              : FontWeight.normal),
                                     ),
                                   ),
                                 ),

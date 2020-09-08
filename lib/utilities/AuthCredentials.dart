@@ -10,7 +10,7 @@ Future<bool> handleSignOut() async {
   setPassword(null);
   setEmail(null);
   try {
-    User user = await auth.currentUser;
+    User user = auth.currentUser;
 
     if (user.providerData[0].providerId == 'google.com') {
       print('google signout');

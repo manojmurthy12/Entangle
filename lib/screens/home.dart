@@ -9,7 +9,8 @@ int _currentindex = 0;
 WillPopScope bottomNavigate(WillPopScope sem, BuildContext context) {
   WillPopScope tabs(int index, WillPopScope semTab) {
     if (index == 0) return semTab;
-    if (index == 1) return WillPopScope(child: search(), onWillPop: null);
+    if (index == 1)
+      return WillPopScope(child: Search_screen(), onWillPop: null);
     if (index == 2) return save(context);
   }
 
@@ -20,6 +21,8 @@ WillPopScope bottomNavigate(WillPopScope sem, BuildContext context) {
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Colors.grey,
         selectedItemColor: maincolor,
+        selectedLabelStyle: TextStyle(color: maincolor),
+        unselectedLabelStyle: TextStyle(color: maincolor2),
         currentIndex: _currentindex,
         showSelectedLabels: true,
         showUnselectedLabels: true,
