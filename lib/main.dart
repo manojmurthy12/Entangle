@@ -1,4 +1,5 @@
 import 'package:entangle/screens/No_Internet.dart';
+import 'package:entangle/screens/SearchScreen.dart';
 import 'package:entangle/screens/login_screen.dart';
 import 'package:entangle/tags/VideoDictionary.dart';
 import 'package:entangle/tags/CourseDictionary.dart';
@@ -399,6 +400,14 @@ class _FirstScreenState extends State<FirstScreen> {
               tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
             ),
           ),
+          actions: [
+            IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () => showSearch(
+                      context: context,
+                      delegate: DataSearch(),
+                    ))
+          ],
           backgroundColor: maincolor,
         ),
         body: Container(
