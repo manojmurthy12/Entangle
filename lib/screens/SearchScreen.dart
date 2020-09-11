@@ -248,17 +248,14 @@ class DataSearch extends SearchDelegate<String> {
   }
 
   Future<String> getDictionary(String Query) async {
-    data = await GetWiki(
-        'https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&redirects=1&titles=physics');
-    var Result;
+    String Result;
     try {
+      data =
+          await GetDictionary('https://owlbot.info/api/v4/dictionary/' + Query);
       var DecodeData = jsonDecode(data);
-      print(DecodeData);
       Result = DecodeData["definitions"][0]["definition"].toString();
-      print(Result);
     } catch (e) {
       Result = 'No results found';
-      print(Result);
       print(e);
     }
     return Result;

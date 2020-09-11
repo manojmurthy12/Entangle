@@ -19,5 +19,5 @@ Future GetDictionary(url) async {
 Future GetWiki(url) async {
   http.Response response = await http.get(url);
   var result = jsonDecode(response.body);
-  print(result);
+  //print(result);
 }

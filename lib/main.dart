@@ -446,7 +446,6 @@ class _FirstScreenState extends State<FirstScreen> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {});
     getSem().then((value) {
       setState(() {
         SelectedSem = value;
@@ -457,23 +456,6 @@ class _FirstScreenState extends State<FirstScreen> {
         SelectedBranch = value;
       });
     });
-    getName().then((value) {
-      setState(() {
-        SelectedName = value;
-      });
-    });
-
-    getSavedVideo().then((value) {
-      setState(() {
-        SavedVideo = value;
-      });
-    });
-    getSavedLink().then((value) {
-      setState(() {
-        SavedLink = value;
-      });
-    });
-
     //getLandingPage();
 
     if (connectivityResult == ConnectivityResult.none) return No_Connection();
@@ -482,43 +464,60 @@ class _FirstScreenState extends State<FirstScreen> {
       if (SelectedSem == 'P-Cycle') {
         SelectedCourse = Pcycletopics;
         Courses = PcycleDict.keys.toList();
-        for (int i = 0; i < PcycleVideoLinks.length; i++) {
-          SelectedCourseVideolinks.add([]);
-          SelectedCourseVideo.add([]);
-          for (int j = 0; j < PcycleVideoLinks[i].length; j++) {
-            SelectedCourseVideolinks[i].add([]);
-            SelectedCourseVideo[i].add([]);
-            for (int k = 0; k < PcycleVideoLinks[i][j].length; k++) {
-              var temp = PcycleVideoLinks[i][j][k].keys.toList();
-              var temp2 = PcycleVideoLinks[i][j][k].values.toList();
-              SelectedCourseVideolinks[i][j].add(temp);
-              SelectedCourseVideo[i][j].add(temp2);
-            }
-          }
-        }
-        return bottomNavigate(Home(PcycleDict.values.toList()), context);
+        return FutureBuilder<bool>(
+            future: assignValues(PcycleVideoLinks),
+            builder: (context, snapshot) {
+              if (snapshot.data == true) {
+                return bottomNavigate(
+                    Home(PcycleDict.values.toList()), context);
+              }
+              return Center(
+                  child: CircularProgressIndicator(
+                backgroundColor: maincolor2,
+              ));
+            });
       }
       if (SelectedSem == 'C-Cycle') {
         SelectedCourse = Ccycletopics;
         Courses = CcycleDict.keys.toList();
-        for (int i = 0; i < CcycleVideoLinks.length; i++) {
-          SelectedCourseVideolinks.add([]);
-          SelectedCourseVideo.add([]);
-          for (int j = 0; j < CcycleVideoLinks[i].length; j++) {
-            SelectedCourseVideolinks[i].add([]);
-            SelectedCourseVideo[i].add([]);
-            for (int k = 0; k < CcycleVideoLinks[i][j].length; k++) {
-              var temp = CcycleVideoLinks[i][j][k].keys.toList();
-              var temp2 = CcycleVideoLinks[i][j][k].values.toList();
-              SelectedCourseVideolinks[i][j].add(temp);
-              SelectedCourseVideo[i][j].add(temp2);
-            }
-          }
-        }
-        return bottomNavigate(Home(CcycleDict.values.toList()), context);
+        return FutureBuilder<bool>(
+            future: assignValues(CcycleVideoLinks),
+            builder: (context, snapshot) {
+              if (snapshot.data == true) {
+                return bottomNavigate(
+                    Home(CcycleDict.values.toList()), context);
+              }
+              return Center(
+                  child: CircularProgressIndicator(
+                backgroundColor: maincolor2,
+              ));
+            });
       } else
         return preferenceView();
     } else
       return preferenceView();
+  }
+
+  Future<bool> assignValues(List<List<List<Map>>> getList) async {
+    try {
+      for (int i = 0; i < getList.length; i++) {
+        SelectedCourseVideolinks.add([]);
+        SelectedCourseVideo.add([]);
+        for (int j = 0; j < getList[i].length; j++) {
+          SelectedCourseVideolinks[i].add([]);
+          SelectedCourseVideo[i].add([]);
+          for (int k = 0; k < getList[i][j].length; k++) {
+            var temp = getList[i][j][k].keys.toList();
+            var temp2 = getList[i][j][k].values.toList();
+            SelectedCourseVideolinks[i][j].add(temp);
+            SelectedCourseVideo[i][j].add(temp2);
+          }
+        }
+      }
+      return Future.value(true);
+    } catch (e) {
+      print(e.message);
+      return Future.value(false);
+    }
   }
 }

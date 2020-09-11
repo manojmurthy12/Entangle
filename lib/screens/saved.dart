@@ -5,6 +5,12 @@ import 'Video_player.dart';
 import 'package:entangle/preferences.dart';
 
 WillPopScope save(BuildContext context) {
+  getSavedVideo().then((value) {
+    SavedVideo = value;
+  });
+  getSavedLink().then((value) {
+    SavedLink = value;
+  });
   Column buildVideo() {
     return Column(
       children: [
