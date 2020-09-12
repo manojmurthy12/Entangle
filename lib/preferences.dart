@@ -100,3 +100,17 @@ Future<void> setSavedLink(List<String> savedlink) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setStringList('savelink', savedlink);
 }
+
+Future<dynamic> getSearchHistory() async {
+  final prefs = await SharedPreferences.getInstance();
+  final _SearchHistory = prefs.getStringList('SearchHistory');
+  if (_SearchHistory == null)
+    return [''];
+  else
+    return _SearchHistory;
+} //it will access device storage and returns the current branch
+
+Future<void> setSearchHistory(List<String> history) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setStringList('SearchHistory', history);
+}

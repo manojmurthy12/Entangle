@@ -7,8 +7,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:entangle/screens/login_screen.dart';
 import '../main.dart';
 
-final GlobalKey<FormState> formKey2 = GlobalKey<FormState>();
-
 class SignUpScreen extends StatefulWidget {
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
@@ -16,6 +14,9 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   bool _rememberMe = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _email, _password;
+  String _message2 = null;
 
   Widget _buildEmailTF() {
     return Column(
@@ -34,16 +35,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
             return TextFormField(
               validator: (input) {
                 if (input.isEmpty) {
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: maincolor,
-                      content: Text('Please enter an email'),
-                    ),
-                  );
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    backgroundColor: maincolor,
+                    content: Text('Please enter an email'),
+                  ));
                 }
-                ;
               },
-              onSaved: (input) => email = input,
+              onSaved: (input) => _email = input,
               keyboardType: TextInputType.emailAddress,
               style: TextStyle(
                 color: Colors.white,
@@ -92,7 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   );
                 }
               },
-              onSaved: (input) => password = input,
+              onSaved: (input) => _password = input,
               obscureText: true,
               style: TextStyle(
                 color: Colors.white,
@@ -122,13 +120,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Builder(builder: (BuildContext context) {
         return RaisedButton(
           elevation: 5.0,
-          onPressed: () async {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: maincolor,
-                content: Text(message),
-              ),
-            );
+          onPressed: () {
+            print(_email);
+            print(_password);
+            signUp(_email, _password);
           },
           padding: EdgeInsets.all(15.0),
           shape: RoundedRectangleBorder(
@@ -231,7 +226,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       SizedBox(height: 30.0),
                       Form(
-                        key: formKey2,
+                        key: _formKey,
                         child: Column(
                           children: [
                             _buildEmailTF(),
@@ -256,31 +251,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> signUp(String email, String password) async {
-    final formState = formKey2.currentState;
+    final formState = _formKey.currentState;
     if (formState.validate()) {
-      formState.save();
       try {
+        formState.save();
+        print('fucker');
         Firebase.initializeApp();
-        UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: email, password: password);
-        userCredential.user.sendEmailVerification();
-        Navigator.pop(context);
-        message = 'registering';
-        //Navigator.of(context).pop();
+        await auth.createUserWithEmailAndPassword(
+            email: _email, password: _password);
+        _message2 = 'User has been succesfully registered';
+        _showDialog();
       } catch (e) {
         print(e.message);
-        setState(() {
-          if (e.code == 'email-already-in-use')
-            message = 'The email is already in use.';
-          if (e.code == 'network-request-failed')
-            message = 'Please connect to the internet.';
-          if (e.code == 'invalid-email')
-            message = 'Enter the correct email-address.';
-          else
-            message = 'An error occured, try again.';
-        });
+        _message2 = e.message;
+        if (formState.validate()) _showDialog();
       }
-    } else
-      message = 'An error occured, try again.';
+    }
+  }
+
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(
+            _message2,
+            style: TextStyle(fontFamily: mainfont, fontSize: 15),
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

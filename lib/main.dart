@@ -1,11 +1,12 @@
 import 'package:entangle/screens/No_Internet.dart';
+
 import 'package:entangle/screens/SearchScreen.dart';
+import 'package:entangle/screens/login_page.dart';
 import 'package:entangle/screens/login_screen.dart';
 import 'package:entangle/tags/VideoDictionary.dart';
 import 'package:entangle/tags/CourseDictionary.dart';
 import 'package:entangle/tags/modules.dart';
 import 'package:entangle/utilities/AuthCredentials.dart';
-import 'package:entangle/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,38 +17,36 @@ import 'screens/resources.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:share/share.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-String message = 'Logging in';
-
+bool persistence;
 String userEmail, userPassword;
 var connectivityResult;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MaterialApp(home: await getLandingPage()));
+
+  runApp(
+    MaterialApp(home: await getLandingPage()),
+  );
 }
 
-String usertitle;
-final FirebaseAuth _auth = FirebaseAuth.instance;
+String usertitle = 'Your Email';
 
 Future<Widget> getLandingPage() async {
   connectivityResult = await (Connectivity().checkConnectivity());
+
   return StreamBuilder<User>(
-    stream: _auth.authStateChanges(),
-    builder: (BuildContext context, snapshot) {
-      if ((snapshot.hasData && (!snapshot.data.isAnonymous)) ||
-          checkPersistence()) {
-        try {
-          print(_auth.currentUser.email);
-          usertitle = _auth.currentUser.email;
-        } catch (e) {
-          print(e);
-          usertitle = userEmail;
-        }
+    stream: auth.authStateChanges(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData && snapshot.data.isAnonymous || checkPersistence()) {
+        if (userEmail != null) usertitle = userEmail;
 
         return FirstScreen();
-      } else
+      } else {
         return LoginScreen();
+        print("error"); //Connection Inactive, show error dialog
+      }
     },
   );
 }
@@ -76,7 +75,7 @@ String semester = 'P-Cycle';
 String branch = 'ECE';
 String phoneNumber;
 String contactText;
-bool fromSave = false;
+bool fromSave = true;
 
 List Courses = [];
 
@@ -130,8 +129,11 @@ class _FirstScreenState extends State<FirstScreen> {
   @override
   void initState() {
     super.initState();
+    getSem().then((value) => semester = value);
+    getBranch().then((value) => branch = value);
+    assignValues(VideoDictionary[semester]);
 
-    //Firebase.initializeApp().whenComplete(() {});
+    Firebase.initializeApp().whenComplete(() {});
   }
 
   Drawer setting() {
@@ -139,7 +141,6 @@ class _FirstScreenState extends State<FirstScreen> {
   }
 
   Container preference() {
-    User user = auth.currentUser;
     return Container(
       color: maincolor,
       child: ListView(
@@ -235,6 +236,8 @@ class _FirstScreenState extends State<FirstScreen> {
                     onChanged: (String newValue) {
                       setState(() {
                         semester = newValue;
+                        setSem(semester);
+                        assignValues(VideoDictionary[newValue]);
                       });
                     },
                   ),
@@ -284,39 +287,13 @@ class _FirstScreenState extends State<FirstScreen> {
                     onChanged: (String newValue) {
                       setState(() {
                         branch = newValue;
+                        setBranch(branch);
                       });
                     },
                   ),
                 ),
                 SizedBox(
                   height: 20,
-                ),
-                Container(
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                        side: BorderSide(color: Colors.blue[800], width: 5)),
-                    color: maincolor,
-                    onPressed: () {
-                      setState(() {
-                        setBranch(branch);
-                        setSem(semester);
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => FirstScreen(),
-                            ));
-                      });
-                    },
-                    child: Text(
-                      '   SUBMIT   ',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15),
-                    ),
-                  ),
                 ),
                 SizedBox(
                   height: 60,
@@ -464,34 +441,12 @@ class _FirstScreenState extends State<FirstScreen> {
       if (SelectedSem == 'P-Cycle') {
         SelectedCourse = Pcycletopics;
         Courses = PcycleDict.keys.toList();
-        return FutureBuilder<bool>(
-            future: assignValues(PcycleVideoLinks),
-            builder: (context, snapshot) {
-              if (snapshot.data == true) {
-                return bottomNavigate(
-                    Home(PcycleDict.values.toList()), context);
-              }
-              return Center(
-                  child: CircularProgressIndicator(
-                backgroundColor: maincolor2,
-              ));
-            });
+        return bottomNavigate(Home(PcycleDict.values.toList()), context);
       }
       if (SelectedSem == 'C-Cycle') {
         SelectedCourse = Ccycletopics;
         Courses = CcycleDict.keys.toList();
-        return FutureBuilder<bool>(
-            future: assignValues(CcycleVideoLinks),
-            builder: (context, snapshot) {
-              if (snapshot.data == true) {
-                return bottomNavigate(
-                    Home(CcycleDict.values.toList()), context);
-              }
-              return Center(
-                  child: CircularProgressIndicator(
-                backgroundColor: maincolor2,
-              ));
-            });
+        return bottomNavigate(Home(CcycleDict.values.toList()), context);
       } else
         return preferenceView();
     } else
@@ -499,6 +454,8 @@ class _FirstScreenState extends State<FirstScreen> {
   }
 
   Future<bool> assignValues(List<List<List<Map>>> getList) async {
+    SelectedCourseVideo = [];
+    SelectedCourseVideolinks = [];
     try {
       for (int i = 0; i < getList.length; i++) {
         SelectedCourseVideolinks.add([]);

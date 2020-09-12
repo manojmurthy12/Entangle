@@ -85,7 +85,7 @@ class _playerState extends State<player> {
       onWillPop: () {
         _controller.pause();
         if (!fromSave)
-          Navigator.push(
+          return Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => Videotags(),
@@ -311,14 +311,14 @@ class player2 extends StatelessWidget {
       onWillPop: () {
         _controller.pause();
         if (!fromSave)
-          Navigator.push(
+          return Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => Videotags(),
             ),
           );
         else
-          Navigator.pop(context);
+          return Navigator.maybePop(context);
       },
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
@@ -387,6 +387,68 @@ class player2 extends StatelessWidget {
                       ],
                     ),
                   ),
+                  if (fromSave)
+                    SizedBox(
+                      child: Column(
+                        children: [
+                          Container(
+                            color: Colors.grey[200],
+                            child: ListTile(
+                              leading: Text(
+                                'other saved videos',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              trailing: Icon(Icons.keyboard_arrow_down,
+                                  color: Colors.grey),
+                            ),
+                          ),
+                          for (int video = 0;
+                              video < SavedVideo.length;
+                              video++)
+                            Column(
+                              children: [
+                                FlatButton(
+                                  onPressed: () {
+                                    _controller.pause();
+                                    VideoNumber = video;
+                                    VideoUrl = SavedLink[VideoNumber];
+                                    VideoTitle = SavedVideo[VideoNumber];
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => player(),
+                                      ),
+                                    );
+                                  },
+                                  child: ListTile(
+                                    leading: Icon(
+                                      Icons.play_circle_filled,
+                                      color: maincolor,
+                                    ),
+                                    title: Text(
+                                      SavedVideo[video],
+                                      style: TextStyle(
+                                          color: (VideoNumber == video)
+                                              ? maincolor
+                                              : Colors.black,
+                                          fontFamily: (VideoNumber == video)
+                                              ? mainfont
+                                              : '',
+                                          fontWeight: (VideoNumber == video)
+                                              ? FontWeight.w500
+                                              : FontWeight.normal),
+                                    ),
+                                  ),
+                                ),
+                                Divider(
+                                  color: Colors.grey,
+                                )
+                              ],
+                            )
+                        ],
+                      ),
+                    ),
                   if (!fromSave)
                     SizedBox(
                       child: Column(
@@ -459,7 +521,7 @@ class player2 extends StatelessWidget {
                             )
                         ],
                       ),
-                    )
+                    ),
                 ],
               ),
             ),

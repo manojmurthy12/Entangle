@@ -115,7 +115,7 @@ class _VideotagsState extends State<Videotags> {
     if (SelectedCourseVideo.length == 0)
       return WillPopScope(
         onWillPop: () {
-          Navigator.push(
+          return Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ResourceScreen(),
@@ -143,7 +143,7 @@ class _VideotagsState extends State<Videotags> {
     else
       return WillPopScope(
         onWillPop: () {
-          Navigator.push(
+          return Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ResourceScreen(),

@@ -1,5 +1,6 @@
 import 'package:entangle/utilities/AuthCredentials.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:entangle/utilities/constants.dart';
@@ -14,10 +15,9 @@ import 'signup_screen.dart';
 
 FirebaseAuth auth = FirebaseAuth.instance;
 final googleSignIn = GoogleSignIn();
-
-String email, password;
-final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-final GlobalKey<FormState> formKey3 = GlobalKey<FormState>();
+String _message = null;
+String _message3 = null;
+bool _rememberMe = true;
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -25,7 +25,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool _rememberMe = true;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _email, _password;
 
   Widget _buildEmailTF() {
     return Column(
@@ -54,9 +55,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ;
               },
               onSaved: (input) {
-                email = input;
                 setState(() {
-                  if (userEmail != email && _rememberMe) setEmail(email);
+                  _email = input;
                 });
               },
               keyboardType: TextInputType.emailAddress,
@@ -108,10 +108,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 }
               },
               onSaved: (input) {
-                password = input;
                 setState(() {
-                  if (userEmail != password && _rememberMe)
-                    setPassword(password);
+                  _password = input;
                 });
               },
               obscureText: true,
@@ -186,13 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
         return RaisedButton(
           elevation: 5.0,
           onPressed: () {
-            SignIn(email, password);
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: maincolor,
-                content: Text(message),
-              ),
-            );
+            SignIn(_email, _password);
           },
           padding: EdgeInsets.all(15.0),
           shape: RoundedRectangleBorder(
@@ -356,7 +348,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 30.0),
                       Form(
-                        key: formKey,
+                        key: _formKey,
                         child: Column(
                           children: [
                             _buildEmailTF(),
@@ -370,8 +362,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       _buildForgotPasswordBtn(),
                       _buildRememberMeCheckbox(),
                       _buildLoginBtn(),
-                      _buildSignInWithText(),
-                      _buildSocialBtnRow(),
+                      //_buildSignInWithText(),
+                      //_buildSocialBtnRow(),
                       _buildSignupBtn(),
                     ],
                   ),
@@ -385,40 +377,31 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> SignIn(String email, String password) async {
-    final formState = formKey.currentState;
+    final formState = _formKey.currentState;
     if (formState.validate()) {
       formState.save();
       try {
         Firebase.initializeApp();
-        UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-        checkPersistence();
-        Navigator.pushReplacement(
+        UserCredential user = await auth
+            .signInWithEmailAndPassword(email: _email, password: _password)
+            .then((value) {
+          if (_rememberMe) {
+            setEmail(_email);
+            setPassword(_password);
+          }
+        });
+
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => FirstScreen(),
           ),
         );
-        message = 'Logging in';
+        //_message = 'Logging in';
       } catch (e) {
-        print(e.code);
-        setState(() {
-          if (e.code == 'too-many-requests')
-            message = 'Too many attempts,try again later.';
-          if (e.code == 'wrong-password')
-            message = 'Password and the mail address didn\'t match.';
-          if (e.code == 'network-request-failed')
-            message = 'Please connect to the internet.';
-          if (e.code == 'user-not-found')
-            message = 'You are not a Registered user';
-          if (e.code == 'invalid-email')
-            message = 'Enter the correct email-address.';
-          else
-            message = 'An error occured, try again.';
-        });
+        print(e.code.toString());
+        _message = e.message;
+        if (formState.validate()) _showDialog();
       }
     }
   }
@@ -435,6 +418,7 @@ class _LoginScreenState extends State<LoginScreen> {
             accessToken: googleSignInAuthentication.accessToken);
 
         await auth.signInWithCredential(authCredential);
+        print(auth.currentUser.email);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -449,6 +433,32 @@ class _LoginScreenState extends State<LoginScreen> {
       print(error);
     }
   }
+
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(
+            _message,
+            style: TextStyle(fontFamily: mainfont, fontSize: 15),
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: Text("Close"),
+              onPressed: () {
+                _message = null;
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class forgot_password extends StatefulWidget {
@@ -457,7 +467,7 @@ class forgot_password extends StatefulWidget {
 }
 
 class _forgot_passwordState extends State<forgot_password> {
-  String _email, _message = '';
+  String _email;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _rememberMe = false;
 
@@ -519,12 +529,6 @@ class _forgot_passwordState extends State<forgot_password> {
           elevation: 5.0,
           onPressed: () {
             sendforgotLink();
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: maincolor,
-                content: Text(_message),
-              ),
-            );
           },
           padding: EdgeInsets.all(15.0),
           shape: RoundedRectangleBorder(
@@ -628,22 +632,38 @@ class _forgot_passwordState extends State<forgot_password> {
       try {
         Firebase.initializeApp();
         await FirebaseAuth.instance.sendPasswordResetEmail(email: _email);
-        setState(() {
-          _message = 'A link has been sent to your email';
-        });
+        _message3 = 'A link has been sent to your email';
+        _showDialog();
       } catch (e) {
         print(e.code);
-        setState(() {
-          if (e.code == 'network-request-failed')
-            _message = 'Please connect to the internet.';
-          if (e.code == 'user-not-found')
-            _message = 'You are not a Registered user';
-          if (e.code == 'invalid-email')
-            _message = 'Enter the correct email-address.';
-          else
-            _message = 'An error occured, try again.';
-        });
+        _message3 = e.message;
+        _showDialog();
       }
     }
+  }
+
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(
+            _message3,
+            style: TextStyle(fontFamily: mainfont, fontSize: 15),
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

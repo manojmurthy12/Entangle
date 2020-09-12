@@ -54,7 +54,7 @@ class _ResourceScreenState extends State<ResourceScreen> {
 
     return WillPopScope(
       onWillPop: () {
-        Navigator.push(
+        return Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => FirstScreen(),

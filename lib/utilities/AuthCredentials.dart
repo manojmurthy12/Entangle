@@ -2,26 +2,15 @@ import 'package:entangle/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:entangle/preferences.dart';
 import 'package:entangle/screens/signup_screen.dart';
+import 'package:flutter/material.dart';
 import '../main.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:entangle/main.dart';
 
 Future<bool> handleSignOut() async {
-  setPassword(null);
   setEmail(null);
-  try {
-    User user = auth.currentUser;
-
-    if (user.providerData[0].providerId == 'google.com') {
-      print('google signout');
-      await googleSignIn.disconnect();
-    } else {
-      FirebaseAuth.instance.signOut();
-    }
-  } catch (e) {
-    print(e.message);
-    FirebaseAuth.instance.signOut();
-  }
+  setPassword(null);
+  auth.signOut();
 }
 
 bool checkPersistence() {
@@ -31,7 +20,8 @@ bool checkPersistence() {
   getPassword().then((value) {
     userPassword = value;
   });
-  if (userEmail != null && userPassword != null)
+  if (auth.currentUser != null) print('true');
+  if (userEmail != null)
     return true;
   else
     return false;
