@@ -1,3 +1,4 @@
+import 'package:entangle/screens/Downloads.dart';
 import 'package:entangle/screens/No_Internet.dart';
 
 import 'package:entangle/screens/SearchScreen.dart';
@@ -7,6 +8,7 @@ import 'package:entangle/tags/VideoDictionary.dart';
 import 'package:entangle/tags/CourseDictionary.dart';
 import 'package:entangle/tags/modules.dart';
 import 'package:entangle/utilities/AuthCredentials.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,7 +26,9 @@ String userEmail, userPassword;
 var connectivityResult;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  final FirebaseApp app = await Firebase.initializeApp();
+  final FirebaseStorage storage = FirebaseStorage(
+      app: app, storageBucket: 'gs://flutter-firebase-plugins.appspot.com');
 
   runApp(
     MaterialApp(home: await getLandingPage()),
@@ -332,6 +336,7 @@ class _FirstScreenState extends State<FirstScreen> {
         setState(() {
           CourseImage = image;
           SubjectNumber = course;
+          subject = Courses[course];
         });
         Navigator.push(
           context,

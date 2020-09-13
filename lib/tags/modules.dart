@@ -28,7 +28,6 @@ List<List<List<String>>> Pcycletopics = [
     [
       'Module-3',
       'Partial Differential equations',
-      'Double and triple integrals'
     ],
     ['Module-4', 'Integral Calculus', 'Curvilinear coordinates'],
     ['Module-5', 'Laplace Transform', 'Inverse laplace transform']

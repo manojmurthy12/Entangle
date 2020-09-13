@@ -1,3 +1,4 @@
+import 'package:entangle/screens/Downloads.dart';
 import 'package:flutter/material.dart';
 import 'package:entangle/main.dart';
 import 'videotags.dart';
@@ -120,15 +121,7 @@ class _ResourceScreenState extends State<ResourceScreen> {
                       buildModule(Topic),
                 ],
               ),
-              ListView(
-                children: [
-                  FlatButton(
-                      onPressed: () {
-                        nothingtoshow();
-                      },
-                      child: Text('download'))
-                ],
-              ),
+              Download_Screen()
             ]),
           )),
     );

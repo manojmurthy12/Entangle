@@ -129,16 +129,134 @@ Map VideoDictionary = {
     [
       [
 //'Module-1','Differential equations-1','Linear differential equations with constant co-efficients'
-        {},
-        {}
+        {
+          'https://www.youtube.com/watch?v=zaUMY9K-QVI&ab_channel=DSCE':
+              'Derivative of arc length Definition',
+          'https://www.youtube.com/watch?v=gJt2uC5pkow&ab_channel=DSCE':
+              'Derivatives of arc length in Cartesian and parametric form',
+          'https://www.youtube.com/watch?v=Kr5Xx8BWaBk&ab_channel=DSCE':
+              'Curvature and Radius Curvature Definition',
+          'https://www.youtube.com/watch?v=G-k_XUSxXB8&ab_channel=DSCE':
+              'Derivation of Expression of Radius of Curvature in Cartesian Form',
+          'https://www.youtube.com/watch?v=vyBkvGnPwJk&ab_channel=VirtuallyPassed':
+              'Radius of Curvature Proof',
+        },
+        {
+          'https://www.youtube.com/watch?v=a58otkmkHtk&ab_channel=ProfessorDaveExplains':
+              'Taylor and Maclaurin Series',
+          'https://www.youtube.com/watch?v=xpB6fOZZ1T0&ab_channel=TheTempleofMaths-BapujiPullepu':
+              'TAYLOR&#39;S THEOREM FOR FUNCTIONS OF TWO VARIABLES-01 BY DR BP (BAPUJI PULLEPU)',
+          'https://www.youtube.com/watch?v=naXKrB6D-gk&list=PL3ZPx1BHMU3VfSAYfA7cf8lLa9L0ILkxv&index=12&t=0s&ab_channel=TheTempleofMaths-BapujiPullepu':
+              'TAYLOR&#39;S THEOREM FOR FUNCTIONS OF TWO VARIABLES-02 BY DR BP (BAPUJI PULLEPU)',
+          'https://www.youtube.com/watch?v=9psACytDp-o&ab_channel=Dr.BrajeshKumarJha':
+              'Taylor&#39;s and Maclaurin&#39;s Series',
+          'https://www.youtube.com/watch?v=LOUupaE8dxg&list=PL3ZPx1BHMU3VfSAYfA7cf8lLa9L0ILkxv&index=6&ab_channel=TheTempleofMaths-BapujiPullepu':
+              'Maxima &amp; Minima for the Functions of Two Variables-01, by Dr BP (Bapuji Pullepu)',
+          'https://www.youtube.com/watch?v=rWFbDKgNsTE&list=PL3ZPx1BHMU3VfSAYfA7cf8lLa9L0ILkxv&index=7&ab_channel=TheTempleofMaths-BapujiPullepu':
+              'Maxima &amp; Minima for the Functions of Two Variables-02, by Dr BP (Bapuji Pullepu)',
+          'https://www.youtube.com/watch?v=GoyeNUaSW08&ab_channel=Multivariablecalculus-IITR':
+              'Lecture 16: Lagrange multipliers',
+          'https://www.youtube.com/watch?v=ZMxxevPA3Pk&list=PL3ZPx1BHMU3VfSAYfA7cf8lLa9L0ILkxv&index=8&ab_channel=TheTempleofMaths-BapujiPullepu':
+              'CONSTRAINTS OF MAXIMA MINIMA BY USING LAGRANGE&#39;S MULTIPLIERS-01 BY DR BP (BAPUJI PULLEPU)',
+          'https://www.youtube.com/watch?v=-7QcwqZ0pok&list=PL3ZPx1BHMU3VfSAYfA7cf8lLa9L0ILkxv&index=9&ab_channel=TheTempleofMaths-BapujiPullepu':
+              'CONSTRAINTS OF MAXIMA MINIMA BY USING LAGRANGE&#39;S MULTIPLIERS-02 BY DR BP (BAPUJI PULLEPU)'
+        }
       ],
       [
 //'Module-2','Differential equations-2','Linear Differential equations with variable co-efficients','Nonlinear differential equations'
-        {}, {}, {}
+        {
+          'https://www.youtube.com/watch?v=IFpT-Ptmkyg&ab_channel=MathbyLEO':
+              'First order, Ordinary Differential Equations.',
+          'https://www.youtube.com/watch?v=RF9EyZCGGx0&ab_channel=JeffreyChasnov':
+              'RLC circuit differential equation | Lecture 25 | Differential Equations for Engineers',
+          'https://www.youtube.com/watch?v=KylJ2v1_c-o&ab_channel=ALLABOUTELECTRONICS':
+              'Transient Analysis: First order R C and R L Circuits',
+          'https://www.youtube.com/watch?v=B4TezoTORYA&ab_channel=ALLABOUTELECTRONICS':
+              'Transient Analysis of the RLC Circuit (with Examples)',
+          'https://www.youtube.com/watch?v=JLU0phEP7h4&ab_channel=TutorialsPoint%28India%29Ltd':
+              'Newtons Law of Cooling',
+        },
+        {
+          'https://www.youtube.com/watch?v=j3FAw4m2ukM&ab_channel=CH-08%3AARYABHATT%5BMathematics%2CPhysics%2CChemistry%5D':
+              'DIFFERENTIAL EQUATIONS \\xe2\\x80\\x93 ORTHOGONAL TRAJECTORY PART 1',
+          'https://www.youtube.com/watch?v=glaHU1vzzek&ab_channel=CH-08%3AARYABHATT%5BMathematics%2CPhysics%2CChemistry%5D':
+              'DIFFERENTIAL EQUATIONS \\xe2\\x80\\x93 ORTHOGONAL TRAJECTORY PART 2',
+          'https://www.youtube.com/watch?v=OlmWFkhKKPY&list=PLO1y6V1SXjjO-wHEYaM-2yyNU28RqEyLX&index=12&ab_channel=TheMathSorcerer':
+              'Differential Equations: Lecture 4.3 Homogeneous Linear Equations with Constant Coefficients',
+          'https://www.youtube.com/watch?v=xhfVlhWyLGM&list=PLO1y6V1SXjjO-wHEYaM-2yyNU28RqEyLX&index=13&ab_channel=TheMathSorcerer':
+              'Differential Equations: Lecture 4.3 Homogeneous Linear Equations with Constant Coefficients(vs 2)',
+          'https://www.youtube.com/watch?v=A1KyaRjfnmk':
+              'Solution of Homogeneous Linear Differential Equations | 18MAT21 | Module 2',
+          'https://www.youtube.com/watch?v=8mrGuGdsusk':
+              'Solution of Initial Value Problems | 18MAT21 | Module 2',
+        },
+        {
+          'https://www.youtube.com/watch?v=Gd6hFgjYfiQ':
+              'Solution of Non homo LDE Part-2',
+          'https://www.youtube.com/watch?v=rCd1FPCwlOw':
+              'Soln of Non-homo LDE : Important problems',
+          'https://www.youtube.com/watch?v=p5UIGRW3PMM':
+              'Soln of non-homo LDE : Sinax / cosax',
+          'https://www.youtube.com/watch?v=Kas28oO8oLw':
+              'Non homogeneous LDE | Type 3',
+          'https://www.youtube.com/watch?v=O3DHuaKD3us':
+              'Non Homogeneous LDE | VTU QP problems | 18MAT21',
+          'https://www.youtube.com/watch?v=9m60JduVoVY':
+              'Applications of LDE | VTU Qp problems'
+        }
       ],
       [
 //'Module-3','Partial Differential equations','Double and triple integrals'
-        {}, {}
+        {
+          'https://www.youtube.com/watch?v=7cKmmBNZLGI':
+              'Cauchys Differential Equation | VTU QP Problems | 18MAT21 | Part 1',
+          'https://www.youtube.com/watch?v=XP8hlsl1loM':
+              'Cauchys Differential Equations | VTU Qp problems | Part 2',
+          'https://www.youtube.com/watch?v=ep7xoctAlEY&ab_channel=HoustonMathPrep':
+              'Cauchy-Euler Differential Equations (2nd Order)',
+          'https://www.youtube.com/watch?v=KTx6KXcJwSA&ab_channel=HoustonMathPrep':
+              'Cauchy-Euler Differential Equations (2nd Order Non-Homogeneous)',
+          'https://www.youtube.com/watch?v=5c4KptxCS80&ab_channel=Differentialequationsforengineers':
+              'Lecture 21 - Legendre Differential Equation',
+          'https://www.youtube.com/watch?v=BraDMuIO0j4&ab_channel=MathMadeEasy':
+              'Legendre Linear Differential Equation | Method &amp; VTU Qp problems | Part 1',
+          'https://www.youtube.com/watch?v=kUrRXLCkFSA&ab_channel=MathMadeEasy':
+              'Legendre&#39;s Linear Differential Equation | VTU Qp problems | Part 2',
+          'https://www.youtube.com/watch?v=I3mWLq5O3Qw&list=PLO1y6V1SXjjO-wHEYaM-2yyNU28RqEyLX&index=16&ab_channel=TheMathSorcerer':
+              'Differential Equations: Lecture 4.6 Variation of Parameters',
+          'https://www.youtube.com/watch?v=b-3U1v8Z6BA&list=PLO1y6V1SXjjO-wHEYaM-2yyNU28RqEyLX&index=17&ab_channel=TheMathSorcerer':
+              'Differential Equations: Lecture 4.6 Variation of Parameters (version 2)',
+          'https://www.youtube.com/watch?v=sJ_eh_tF4RE':
+              'Method of Variation of Parameter | Procedure and example | Part 1',
+          'https://www.youtube.com/watch?v=HaUgbx9Zfpk':
+              'Method of variation of parameters | VTU Qp problems | 18MAT21 | Part 2',
+          'https://www.youtube.com/watch?v=VOLfCkVSw5c':
+              'Method of variation of parameters | VTU QP problems | 18MAT21 | Part 3',
+          'https://www.youtube.com/watch?v=5d1f4LkvJkQ':
+              'Method of Variation of Parameters | VTU QP Problems | Part 4 | 18MAT21',
+          'https://www.youtube.com/watch?v=63N5xZ-Z8cw':
+              'Partial Differential Eqn | Basics',
+          'https://www.youtube.com/watch?v=mURE3_QRg-w':
+              'Formation of PDE by eliminating arbitrary constants | VTU Qp problems',
+          'https://www.youtube.com/watch?v=XNqr9MuA788':
+              'Formation of PDE by eliminating arbitrary functions | VTU Qp Problems | Part 1',
+          'https://www.youtube.com/watch?v=qc4MDIt7lVI':
+              'Formation of PDE by eliminating arbitrary functions | VTU Qp problems | Part 2',
+          'https://www.youtube.com/watch?v=xR61QvfyySs':
+              'Formation of PDE by eliminating arbitrary function | Part 3',
+          'https://www.youtube.com/watch?v=YW3tCcI17L8':
+              'Solution of nonhomogeneous PDE | VTU Qp Problems',
+          'https://www.youtube.com/watch?v=Y_f3ejq3SKg':
+              'Solution of homogeneous PDE | VTU Qp Problems',
+          'https://www.youtube.com/watch?v=r6eqzMq7O8c':
+              'Lagranges Linear PDE | Part 1',
+          'https://www.youtube.com/watch?v=dqLlKRk1G8c&ab_channel=Lettherebemath':
+              'Solving PDEs through separation of variables 1 | Boundary Value Problems | LetThereBeMath|',
+          'https://www.youtube.com/watch?v=wpZg4kJ_0GQ&ab_channel=Lettherebemath':
+              'Solving PDEs through separation of variables 2 | Boundary Value Problems | LetThereBeMath |',
+          'https://www.youtube.com/watch?v=FY_6Eyhgx70&ab_channel=AlexandraBudden':
+              '12.1: Separable Partial Differential Equations'
+        },
       ],
       [
 //'Module-4', 'Integral Calculus', 'Curvilinear coordinates'

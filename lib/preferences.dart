@@ -114,3 +114,17 @@ Future<void> setSearchHistory(List<String> history) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setStringList('SearchHistory', history);
 }
+
+Future<List<String>> getSavedDocs() async {
+  final prefs = await SharedPreferences.getInstance();
+  final _Saveddocs = prefs.getStringList('saveDocs');
+  if (_Saveddocs == null)
+    return [];
+  else
+    return _Saveddocs;
+} //it will access device storage and returns the current branch
+
+Future<void> setSavedDocs(List<String> savedDocs) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setStringList('saveDocs', savedDocs);
+}

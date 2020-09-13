@@ -142,8 +142,9 @@ class DataSearch extends SearchDelegate<String> {
                         );
                       }
                       return Center(
-                          child: CircularProgressIndicator(
-                        backgroundColor: maincolor2,
+                          child: Image.asset(
+                        'images/loading.gif',
+                        scale: 3,
                       ));
                     }),
               ),
@@ -205,8 +206,9 @@ class DataSearch extends SearchDelegate<String> {
                         );
                       }
                       return Center(
-                          child: CircularProgressIndicator(
-                        backgroundColor: maincolor2,
+                          child: Image.asset(
+                        'images/loading.gif',
+                        scale: 5,
                       ));
                     }),
               ),
@@ -242,8 +244,9 @@ class DataSearch extends SearchDelegate<String> {
                   );
                 }
                 return Center(
-                    child: CircularProgressIndicator(
-                  backgroundColor: maincolor2,
+                    child: Image.asset(
+                  'images/loading.gif',
+                  scale: 5,
                 ));
               }),
         ),

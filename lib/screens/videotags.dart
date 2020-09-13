@@ -53,7 +53,7 @@ class _VideotagsState extends State<Videotags> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => player2(),
+                          builder: (context) => player(),
                         ),
                       );
                     });
