@@ -92,7 +92,12 @@ class _playerState extends State<player> {
             ),
           );
         else
-          Navigator.pop(context);
+          return Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FirstScreen(),
+            ),
+          );
       },
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
@@ -214,6 +219,7 @@ class _playerState extends State<player> {
                                               [TopicNumber][SubtopicNumber - 1]
                                           [video],
                                       style: TextStyle(
+                                          fontSize: 15,
                                           color: (VideoNumber == video)
                                               ? maincolor
                                               : Colors.black,
@@ -226,9 +232,69 @@ class _playerState extends State<player> {
                                     ),
                                   ),
                                 ),
-                                Divider(
-                                  color: Colors.grey,
-                                )
+                              ],
+                            )
+                        ],
+                      ),
+                    )
+                  else
+                    SizedBox(
+                      child: Column(
+                        children: [
+                          Container(
+                            color: Colors.grey[200],
+                            child: ListTile(
+                              leading: Text(
+                                'Saved Videos',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              trailing: Icon(Icons.keyboard_arrow_down,
+                                  color: Colors.grey),
+                            ),
+                          ),
+                          for (int video = 0;
+                              video < SavedVideo.length;
+                              video++)
+                            Column(
+                              children: [
+                                FlatButton(
+                                  onPressed: () {
+                                    _controller.pause();
+                                    VideoNumber = video;
+                                    print(VideoNumber);
+                                    VideoUrl = SavedLink[VideoNumber];
+                                    VideoTitle = SavedVideo[VideoNumber];
+                                    print(VideoUrl);
+                                    print(VideoTitle);
+                                    fromSave = true;
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => player(),
+                                      ),
+                                    );
+                                  },
+                                  child: ListTile(
+                                    leading: Icon(
+                                      Icons.play_circle_filled,
+                                      color: maincolor,
+                                    ),
+                                    title: Text(
+                                      SavedVideo[video],
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: (VideoNumber == video)
+                                              ? maincolor
+                                              : Colors.black,
+                                          fontFamily: (VideoNumber == video)
+                                              ? mainfont
+                                              : '',
+                                          fontWeight: (VideoNumber == video)
+                                              ? FontWeight.w500
+                                              : FontWeight.normal),
+                                    ),
+                                  ),
+                                ),
                               ],
                             )
                         ],

@@ -11,18 +11,22 @@ Future<bool> handleSignOut() async {
   setEmail(null);
   setPassword(null);
   auth.signOut();
+  logged_in = false;
 }
 
-bool checkPersistence() {
+/*Future<bool> checkPersistence() async {
   getEmail().then((value) {
     userEmail = value;
   });
   getPassword().then((value) {
     userPassword = value;
   });
-  if (auth.currentUser != null) print('true');
-  if (userEmail != null)
-    return true;
+  if (await auth.currentUser != null)
+    print('true');
   else
-    return false;
-}
+    print('no');
+  if (userEmail != null)
+    return Future.value(true);
+  else
+    return Future.value(false);
+}*/

@@ -105,7 +105,7 @@ Future<dynamic> getSearchHistory() async {
   final prefs = await SharedPreferences.getInstance();
   final _SearchHistory = prefs.getStringList('SearchHistory');
   if (_SearchHistory == null)
-    return [''];
+    return [];
   else
     return _SearchHistory;
 } //it will access device storage and returns the current branch

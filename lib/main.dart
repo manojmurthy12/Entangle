@@ -1,8 +1,6 @@
 import 'package:entangle/screens/Downloads.dart';
-import 'package:entangle/screens/No_Internet.dart';
-
+import 'package:entangle/screens/OnboardingScreen.dart';
 import 'package:entangle/screens/SearchScreen.dart';
-import 'package:entangle/screens/login_page.dart';
 import 'package:entangle/screens/login_screen.dart';
 import 'package:entangle/tags/VideoDictionary.dart';
 import 'package:entangle/tags/CourseDictionary.dart';
@@ -13,13 +11,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
+import 'package:path_provider/path_provider.dart';
 import 'screens/home.dart';
 import 'preferences.dart';
 import 'screens/resources.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:share/share.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 bool persistence;
 String userEmail, userPassword;
@@ -29,6 +27,15 @@ Future<void> main() async {
   final FirebaseApp app = await Firebase.initializeApp();
   final FirebaseStorage storage = FirebaseStorage(
       app: app, storageBucket: 'gs://flutter-firebase-plugins.appspot.com');
+  getEmail().then((value) => userEmail = value);
+  getPassword().then((value) => userPassword = value);
+  getSem().then((value) => semester = value);
+  getBranch().then((value) => branch = value);
+  await assignValues(VideoDictionary[semester]);
+  if (userEmail != null &&
+      userPassword != null &&
+      userEmail != '' &&
+      userPassword != '') SignIn(userEmail, userPassword);
 
   runApp(
     MaterialApp(home: await getLandingPage()),
@@ -36,23 +43,40 @@ Future<void> main() async {
 }
 
 String usertitle = 'Your Email';
-
+bool logged_in = false;
 Future<Widget> getLandingPage() async {
   connectivityResult = await (Connectivity().checkConnectivity());
 
   return StreamBuilder<User>(
     stream: auth.authStateChanges(),
     builder: (context, snapshot) {
-      if (snapshot.hasData && snapshot.data.isAnonymous || checkPersistence()) {
-        if (userEmail != null) usertitle = userEmail;
+      if (snapshot.hasData && !snapshot.data.isAnonymous) {
+        if (auth.currentUser.email != null) {
+          print(auth.currentUser.email);
+          usertitle = auth.currentUser.email;
+          print(usertitle);
+        }
 
         return FirstScreen();
       } else {
-        return LoginScreen();
+        return OnboardingScreen();
         print("error"); //Connection Inactive, show error dialog
       }
     },
   );
+}
+
+Future<void> SignIn(String Email, String Password) async {
+  try {
+    Firebase.initializeApp();
+    print(Email);
+    UserCredential user =
+        await auth.signInWithEmailAndPassword(email: Email, password: Password);
+  }
+  //_message = 'Logging in';
+  catch (e) {
+    print(e);
+  }
 }
 
 Color maincolor = Color.fromRGBO(113, 170, 239, 1);
@@ -91,7 +115,6 @@ List<List<List<List>>> SelectedCourseVideolinks = [];
 
 List<String> SavedVideo = [];
 List<String> SavedLink = [];
-bool logged_in = false;
 Container nothingtoshow() {
   return Container(
     child: Center(
@@ -133,11 +156,20 @@ class _FirstScreenState extends State<FirstScreen> {
   @override
   void initState() {
     super.initState();
-    getSem().then((value) => semester = value);
+    getEmail().then((value) => userEmail = value);
+    getPassword().then((value) => userPassword = value);
+    getSavedDocs().then((value) => Document_names = value);
+    appDirectory().then((value) => dir = value);
+    getSem().then((value) async {
+      semester = value;
+      await assignValues(VideoDictionary[semester]);
+    });
     getBranch().then((value) => branch = value);
-    assignValues(VideoDictionary[semester]);
-
     Firebase.initializeApp().whenComplete(() {});
+  }
+
+  Future<String> appDirectory() async {
+    return (await getApplicationDocumentsDirectory()).path;
   }
 
   Drawer setting() {
@@ -175,7 +207,7 @@ class _FirstScreenState extends State<FirstScreen> {
                     backgroundColor: maincolor2,
                   ),
                   title: Text(
-                    usertitle,
+                    (usertitle != null) ? usertitle : 'Your Name',
                     style: TextStyle(
                       color: Colors.grey,
                     ),
@@ -218,13 +250,13 @@ class _FirstScreenState extends State<FirstScreen> {
                     ),
                   ),
                   trailing: DropdownButton<String>(
-                    value: semester,
+                    value: (semester == 'P-Cycle') ? 'Sem-1' : 'Sem-2',
                     icon: Icon(Icons.arrow_drop_down),
                     iconSize: 24,
                     elevation: 16,
                     items: <String>[
-                      'P-Cycle',
-                      'C-Cycle',
+                      'Sem-1',
+                      'Sem-2',
                     ].map<DropdownMenuItem<String>>((String value1) {
                       return DropdownMenuItem<String>(
                         value: value1,
@@ -239,9 +271,11 @@ class _FirstScreenState extends State<FirstScreen> {
                     }).toList(),
                     onChanged: (String newValue) {
                       setState(() {
-                        semester = newValue;
+                        if (newValue == 'Sem-1') semester = 'P-Cycle';
+                        if (newValue == 'Sem-2') semester = 'C-Cycle';
                         setSem(semester);
-                        assignValues(VideoDictionary[newValue]);
+                        print(semester);
+                        assignValues(VideoDictionary[semester]);
                       });
                     },
                   ),
@@ -305,7 +339,7 @@ class _FirstScreenState extends State<FirstScreen> {
                 FlatButton.icon(
                   onPressed: () {
                     Share.share(
-                        'https://play.google.com/store/apps/details?id=com.quantumloop.weplay'); //TODO: Change the app id
+                        'https://play.google.com/store/apps/dev?id=4633135606490362370'); //TODO: Change the app id
                   },
                   icon: Icon(
                     Icons.share,
@@ -357,7 +391,7 @@ class _FirstScreenState extends State<FirstScreen> {
                 color: Colors.grey[800],
                 fontFamily: mainfont,
                 fontSize: 13,
-                fontWeight: FontWeight.w200),
+                fontWeight: FontWeight.w300),
           ),
         ),
       ),
@@ -412,7 +446,7 @@ class _FirstScreenState extends State<FirstScreen> {
                 height: 40,
                 child: Center(
                   child: Text(
-                    'missing subjetcs are in the other cycle',
+                    'missing subjects are in the other semester',
                     style: TextStyle(
                         color: Colors.grey, fontFamily: mainfont, fontSize: 12),
                     textAlign: TextAlign.center,
@@ -438,48 +472,41 @@ class _FirstScreenState extends State<FirstScreen> {
         SelectedBranch = value;
       });
     });
-    //getLandingPage();
-
-    if (connectivityResult == ConnectivityResult.none) return No_Connection();
-
-    if (connectivityResult != ConnectivityResult.none) {
-      if (SelectedSem == 'P-Cycle') {
-        SelectedCourse = Pcycletopics;
-        Courses = PcycleDict.keys.toList();
-        return bottomNavigate(Home(PcycleDict.values.toList()), context);
-      }
-      if (SelectedSem == 'C-Cycle') {
-        SelectedCourse = Ccycletopics;
-        Courses = CcycleDict.keys.toList();
-        return bottomNavigate(Home(CcycleDict.values.toList()), context);
-      } else
-        return preferenceView();
+    if (SelectedSem == 'P-Cycle') {
+      SelectedCourse = Pcycletopics;
+      Courses = PcycleDict.keys.toList();
+      return bottomNavigate(Home(PcycleDict.values.toList()), context);
+    }
+    if (SelectedSem == 'C-Cycle') {
+      SelectedCourse = Ccycletopics;
+      Courses = CcycleDict.keys.toList();
+      return bottomNavigate(Home(CcycleDict.values.toList()), context);
     } else
       return preferenceView();
   }
+}
 
-  Future<bool> assignValues(List<List<List<Map>>> getList) async {
-    SelectedCourseVideo = [];
-    SelectedCourseVideolinks = [];
-    try {
-      for (int i = 0; i < getList.length; i++) {
-        SelectedCourseVideolinks.add([]);
-        SelectedCourseVideo.add([]);
-        for (int j = 0; j < getList[i].length; j++) {
-          SelectedCourseVideolinks[i].add([]);
-          SelectedCourseVideo[i].add([]);
-          for (int k = 0; k < getList[i][j].length; k++) {
-            var temp = getList[i][j][k].keys.toList();
-            var temp2 = getList[i][j][k].values.toList();
-            SelectedCourseVideolinks[i][j].add(temp);
-            SelectedCourseVideo[i][j].add(temp2);
-          }
+Future<bool> assignValues(List<List<List<Map>>> getList) async {
+  SelectedCourseVideo = [];
+  SelectedCourseVideolinks = [];
+  try {
+    for (int i = 0; i < getList.length; i++) {
+      SelectedCourseVideolinks.add([]);
+      SelectedCourseVideo.add([]);
+      for (int j = 0; j < getList[i].length; j++) {
+        SelectedCourseVideolinks[i].add([]);
+        SelectedCourseVideo[i].add([]);
+        for (int k = 0; k < getList[i][j].length; k++) {
+          var temp = getList[i][j][k].keys.toList();
+          var temp2 = getList[i][j][k].values.toList();
+          SelectedCourseVideolinks[i][j].add(temp);
+          SelectedCourseVideo[i][j].add(temp2);
         }
       }
-      return Future.value(true);
-    } catch (e) {
-      print(e.message);
-      return Future.value(false);
     }
+    return Future.value(true);
+  } catch (e) {
+    print(e.message);
+    return Future.value(false);
   }
 }

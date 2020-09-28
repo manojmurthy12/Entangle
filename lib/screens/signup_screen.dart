@@ -177,13 +177,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     Firebase.initializeApp();
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: maincolor,
-        leading: IconButton(
-          icon: Icon(Icons.close),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
@@ -210,7 +203,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   physics: AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.symmetric(
                     horizontal: 40.0,
-                    vertical: 120.0,
+                    vertical: 240.0,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -253,18 +246,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Future<void> signUp(String email, String password) async {
     final formState = _formKey.currentState;
     if (formState.validate()) {
+      formState.save();
       try {
-        formState.save();
-        print('fucker');
         Firebase.initializeApp();
         await auth.createUserWithEmailAndPassword(
             email: _email, password: _password);
-        _message2 = 'User has been succesfully registered';
+        _message2 = 'User has been successfully registered';
         _showDialog();
       } catch (e) {
         print(e.message);
         _message2 = e.message;
-        if (formState.validate()) _showDialog();
+        if (e.message.toString() != 'Given String is empty or null')
+          _showDialog();
       }
     }
   }

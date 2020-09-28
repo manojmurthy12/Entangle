@@ -1,6 +1,6 @@
 Map PcycleDict = {
   'Mathematics-1': 'math1',
-  'Mathematics-2': 'math2',
+  //'Mathematics-2': 'math2',
   'Physics': 'physics',
   'Basic Electrical Engg': 'electrical',
   'Elements of Mechanical Engg': 'mechanical',
@@ -9,7 +9,7 @@ Map PcycleDict = {
   'Physics Lab': 'physicslab',
 };
 Map CcycleDict = {
-  'Mathematics-1': 'math1',
+  //'Mathematics-1': 'math1',
   'Mathematics-2': 'math2',
   'Chemistry': 'chemistry',
   'Programming in C and Data Structures': 'comp',

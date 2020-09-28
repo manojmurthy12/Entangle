@@ -16,19 +16,19 @@ dependencies:
   google_sign_in:
   http: ^0.12.1
   firebase_auth: ^0.18.0+1
-  firebase_dynamic_links: ^0.6.0
   firebase_core:
   share: ^0.6.4+3
   youtube_player_flutter: ^6.1.1
   url_launcher: ^5.4.11
   dio:
   path_provider: ^1.6.11
-  dartpedia: ^1.6.6
   connectivity: ^0.4.9+2
-  flappy_search_bar: ^1.7.2
   provider:
   flutter_full_pdf_viewer: ^1.0.6
   firebase_storage: ^4.0.0
+  percent_indicator: ^2.1.6
+  expand_widget: ^1.0.0+2
+  xml2json: ^4.3.0
 
 
 dev_dependencies:

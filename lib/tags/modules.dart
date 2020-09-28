@@ -13,7 +13,7 @@ List<List<List<String>>> Pcycletopics = [
     ['Module-5', 'Linear Algebra']
   ],
   //Mathematics-2
-  [
+  /*[
     [
       'Module-1',
       'Differential equations-1',
@@ -27,11 +27,17 @@ List<List<List<String>>> Pcycletopics = [
     ],
     [
       'Module-3',
-      'Partial Differential equations',
+      'Linear Differential equations',
+      'Partial Differential equations'
     ],
-    ['Module-4', 'Integral Calculus', 'Curvilinear coordinates'],
-    ['Module-5', 'Laplace Transform', 'Inverse laplace transform']
-  ],
+    ['Module-4', 'Beta and Gamma functions'],
+    [
+      'Module-5',
+      'Laplace Transform',
+      'laplace transform Examples',
+      'Laplace Transform intuition'
+    ]
+  ],*/
   //Physics
   [
     ['Module-1', 'Modern Physics and quantum Mechanics'],
@@ -49,10 +55,9 @@ List<List<List<String>>> Pcycletopics = [
       'Module-1',
       'D.C Circuits',
       'Electromagnetism',
-      'Electromagnetic Induction'
     ],
-    ['Module-2', 'D.C Machines', 'Measuring Instruments'],
-    ['Module-3', 'Single-phase A.C Circuits', 'Domestics Wiring'],
+    ['Module-2', 'D.C Machines', 'Brush-less DC motors and Stepper Motor'],
+    ['Module-3', 'A.C Circuits', 'Phasor Diagrams'],
     [
       'Module-4',
       'Three Phase circuits',
@@ -130,7 +135,7 @@ List<List<List<String>>> Pcycletopics = [
 
 List<List<List<String>>> Ccycletopics = [
   //Mathematics-1
-  [
+  /*[
     ['Module-1', 'Differential Calculus-1', 'Polar Curves'],
     ['Module-2', 'Differential Calculus -2', 'Partial derivatives'],
     ['Module-3', 'Vector Calculus', 'Curve Tracing'],
@@ -141,13 +146,13 @@ List<List<List<String>>> Ccycletopics = [
       'Applications'
     ],
     ['Module-5', 'Linear Algebra']
-  ],
+  ],*/
   //Mathematics-2
   [
     [
       'Module-1',
       'Differential equations-1',
-      'Linear differential equations with contant co-efficients'
+      'Linear differential equations with constant co-efficients'
     ],
     [
       'Module-2',
@@ -157,11 +162,16 @@ List<List<List<String>>> Ccycletopics = [
     ],
     [
       'Module-3',
-      'Partial Differential equations',
-      'Double and triple integrals'
+      'Linear Differential equations',
+      'Partial Differential equations'
     ],
-    ['Module-4', 'Integral Calculus', 'Curvilinear coordinates'],
-    ['Module-5', 'Laplace Transform', 'Inverse laplace transform']
+    ['Module-4', 'Beta and Gamma functions'],
+    [
+      'Module-5',
+      'Laplace Transform',
+      'laplace transform Examples',
+      'Laplace Transform intuition'
+    ]
   ],
   //Chemistry
   [
@@ -184,7 +194,7 @@ List<List<List<String>>> Ccycletopics = [
     ['Module-2', 'Branching and Looping'],
     ['Module-3', 'Arrays and Strings', 'Functions'],
     ['Module-4', 'Structure and File Management'],
-    ['Module-5', 'Pointers and Preprocessors', 'Intro to Data Structures'],
+    ['Module-5', 'Pointers and Preprocessors'],
   ],
   //CAED
   [
@@ -237,7 +247,6 @@ List<List<List<String>>> Ccycletopics = [
   ],
   //Chemistry Lab
   [
-    ['Instrumental Experiments'],
-    ['Volumetric Experiments'],
+    ['Experiments', 'Volumetric and Instrumental'],
   ],
 ];

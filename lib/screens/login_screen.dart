@@ -44,19 +44,18 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Builder(builder: (BuildContext context) {
             return TextFormField(
               validator: (input) {
-                if (input.isEmpty) {
+                if (!input.contains('@') || input.isEmpty) {
                   Scaffold.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor: maincolor,
-                      content: Text('Please enter an email'),
+                      content: Text('Enter a valid email address'),
                     ),
                   );
                 }
-                ;
               },
               onSaved: (input) {
                 setState(() {
-                  _email = input;
+                  _email = input.trim();
                 });
               },
               keyboardType: TextInputType.emailAddress,
@@ -95,37 +94,40 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: Builder(builder: (BuildContext context) {
-            return TextFormField(
-              validator: (input) {
-                if (input.length < 6) {
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: maincolor,
-                      content: Text(
-                          'Your password needs to be atleast 6 characters'),
-                    ),
-                  );
-                }
-              },
-              onSaved: (input) {
-                setState(() {
-                  _password = input;
-                });
-              },
-              obscureText: true,
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'OpenSans',
-              ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14.0),
-                prefixIcon: Icon(
-                  Icons.lock,
+            return Container(
+              child: TextFormField(
+                validator: (input) {
+                  if (input.length < 6) {
+                    //return 'Your password needs to be atleast 6 characters';
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: maincolor,
+                        content: Text(
+                            'Your password needs to be atleast 6 characters'),
+                      ),
+                    );
+                  }
+                },
+                onSaved: (input) {
+                  setState(() {
+                    _password = input.trim();
+                  });
+                },
+                obscureText: true,
+                style: TextStyle(
                   color: Colors.white,
+                  fontFamily: 'OpenSans',
                 ),
-                hintText: 'Enter your Password',
-                hintStyle: kHintTextStyle,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.only(top: 14.0),
+                  prefixIcon: Icon(
+                    Icons.lock,
+                    color: Colors.white,
+                  ),
+                  hintText: 'Enter your Password',
+                  hintStyle: kHintTextStyle,
+                ),
               ),
             );
           }),
@@ -184,6 +186,10 @@ class _LoginScreenState extends State<LoginScreen> {
         return RaisedButton(
           elevation: 5.0,
           onPressed: () {
+            if (_rememberMe) {
+              setEmail(_email);
+              setPassword(_password);
+            }
             SignIn(_email, _password);
           },
           padding: EdgeInsets.all(15.0),
@@ -332,7 +338,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   physics: AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.symmetric(
                     horizontal: 40.0,
-                    vertical: 120.0,
+                    vertical: 150,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -362,8 +368,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       _buildForgotPasswordBtn(),
                       _buildRememberMeCheckbox(),
                       _buildLoginBtn(),
-                      //_buildSignInWithText(),
-                      //_buildSocialBtnRow(),
+                      _buildSignInWithText(),
+                      _buildSocialBtnRow(),
                       _buildSignupBtn(),
                     ],
                   ),
@@ -399,11 +405,17 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         //_message = 'Logging in';
       } catch (e) {
-        print(e.code.toString());
+        print(e.message);
         _message = e.message;
-        if (formState.validate()) _showDialog();
+        if (e.message.toString() != 'Given String is empty or null')
+          _showDialog();
       }
-    }
+    } else {}
+  }
+
+  Future<bool> checkPersistence() async {
+    if (userEmail != null && userPassword != null)
+      SignIn(userEmail, userPassword);
   }
 
   Future<bool> SignInwithGoogle() async {
@@ -429,8 +441,9 @@ class _LoginScreenState extends State<LoginScreen> {
         return Future.value(false);
       }
       //Navigator.push(context,MaterialPageRoute(builder: (context) => FirstScreen(),),);
-    } catch (error) {
-      print(error);
+    } catch (e) {
+      _message = e.message;
+      _showDialog();
     }
   }
 
@@ -637,7 +650,8 @@ class _forgot_passwordState extends State<forgot_password> {
       } catch (e) {
         print(e.code);
         _message3 = e.message;
-        _showDialog();
+        if (e.message.toString() != 'Given String is empty or null')
+          _showDialog();
       }
     }
   }

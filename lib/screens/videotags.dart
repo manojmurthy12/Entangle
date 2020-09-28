@@ -66,7 +66,7 @@ class _VideotagsState extends State<Videotags> {
                     title: Text(
                       SelectedCourseVideo[SubjectNumber][TopicNumber]
                           [Subtopic - 1][video],
-                      style: TextStyle(color: Colors.blueGrey),
+                      style: TextStyle(fontSize: 13, fontFamily: mainfont),
                     ),
                     trailing: IconButton(
                         icon: (!SavedVideo.contains(
@@ -100,9 +100,7 @@ class _VideotagsState extends State<Videotags> {
                         }),
                   ),
                 ),
-                Divider(
-                  color: Colors.grey,
-                )
+                Divider(color: Colors.blueGrey[100])
               ],
             ),
         ],
